@@ -29,7 +29,7 @@ class debet extends budgetten {
             $this->db->join('boeking','boeking.transactie_id = transactie.id AND boeking.bedrag < 0');
             $this->db->where('boeking.budget_id',$budget->id);
             $this->db->where('transactie.status',1);
-            $this->db->order_by('transactie.datum');
+            $this->db->order_by('transactie.datum DESC');
             $data['transacties'] = $transactie->readAll();
             $data['transacties_title'] = $budget->naam.' transacties';
             $data['active_budget'] = $budget->id;

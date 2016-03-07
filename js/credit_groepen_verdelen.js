@@ -134,7 +134,6 @@ $('#saveboekingen').click(function(){
                     $stand.fadeTo(400,1).removeAttr('disabled','');
 
                     $saldo.data('saldo',saldo).find('span:nth-child(2)').html('&euro; '+saldo.toFixed(2));
-                    $input.val(0);
                     $stand.val(saldo.toFixed(2));
                 }
             });

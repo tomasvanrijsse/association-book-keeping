@@ -41,6 +41,7 @@ class transactie extends PNCT_Model {
     
     public function getOpenDebet(){
         $this->setAccount();
+        $this->db->order_by('datum DESC');
         $this->db->where('type','debet');
         $this->db->where('id NOT IN (SELECT transactie_id FROM boeking WHERE transactie_id IS NOT NULL AND bedrag < 0)');
         $this->db->where('status >=',1);
