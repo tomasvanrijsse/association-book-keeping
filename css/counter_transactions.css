@@ -1,0 +1,44 @@
+ul.table.credit span:nth-child(1),
+ul.table.debet span:nth-child(2),
+ul.table span:nth-child(4){
+    width:260px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+ul.table.credit span:nth-child(2),
+ul.table.debet span:nth-child(3),
+ul.table span:nth-child(5){
+    width:76px;
+    text-align: right;
+}
+ul.table.credit span:nth-child(3),
+ul.table.debet span:nth-child(1){
+    width:36px;
+}
+
+ul.table.debet span:nth-child(1) {
+    height:58px
+}
+
+ul.table span:nth-child(4){
+    font-size: 85%;
+}
+
+.hidesuggestion {
+    text-align: right;
+    padding-top:10px;
+}
+
+li.strike span {
+    text-decoration: line-through;
+}
+
+ul.table li {
+    min-height: 74px;
+    margin-bottom: 3px;
+}
+
+.span8 h4, .span8 p {
+    display:inline-block;
+}
