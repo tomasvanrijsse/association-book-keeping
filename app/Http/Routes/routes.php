@@ -11,4 +11,8 @@
 |
 */
 
-Route::get('/', 'PublicHomeController@index');
+use App\Http\Controllers\BudgetTargetsController;
+use App\Http\Controllers\HomeController;
+
+Route::get('/', ['uses' => HomeController::class . '@index']);
+Route::get('/budget-targets', ['uses' => BudgetTargetsController::class . '@index']);

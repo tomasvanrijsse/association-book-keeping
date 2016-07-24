@@ -1,37 +1,34 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed!');
+<?php
 
-class countersuggestie extends PNCT_Model {
+namespace App\Models;
 
-    public $id;
-    public $status;
-    public $bedrag;
-    public $rekeningnaam;
-    public $account_id;
-    public $gewicht;
-    public $transactie_id;
+use Illuminate\Database\Eloquent\Model;
 
-    /** CUSTOM countersuggestie FUNCTIONS **/
+class CounterSuggestion extends Model {
 
-    /*function __construct()
+    public $table = 'countersuggestie';
+
+    public function getGewichtNaam()
     {
-        // Call the Model constructor
-        parent::__construct();
-    }*/
-    
-    function __get($key){
-        switch($key){
-            case 'gewicht_naam':        
-                switch($this->gewicht){
-                    case '1': return 'bedrag en rekening'; break;
-                    case '2': return 'lid'; break;
-                    case '3': return 'bedrag'; break;
-                    case '4': return 'rekening'; break;
-                }
-            break;
-            default:            
-                return parent::__get($key);         
-            break;
+        switch ($this->gewicht) {
+            case '1':
+                return 'bedrag en rekening';
+                break;
+            case '2':
+                return 'lid';
+                break;
+            case '3':
+                return 'bedrag';
+                break;
+            case '4':
+                return 'rekening';
+                break;
         }
+    }
+
+    public function scopeNewState($query)
+    {
+        return $query->where('status', '=', 1);
     }
     
     function findCounterTransactions(){
@@ -101,7 +98,7 @@ FROM (
         $this->db->update($this->getTableName(), array('status' => 2,'transactie_id'=>$tid));
     }
     
-    public function create(){
+    public function createOld(){
         $t_ids = explode(',',$this->transaction_ids);
         
         //first check if the suggestion is present

@@ -6,26 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model {
 
-    public $id;
-    public $bedrag;
-    public $van;
-    public $van_naam;
-    public $naar;
-    public $datum;
-    public $description;
-    public $transactietype;
-    public $type;
-    public $bankrekening_id;
-    public $creditgroep_id;
-    public $status;
-
-    /** CUSTOM transactie FUNCTIONS **/
-
-    /*function __construct()
-    {
-        // Call the Model constructor
-        parent::__construct();
-    }*/
+    public $table = 'transactie';
        
     private function setAccount(){
         $account = new account();

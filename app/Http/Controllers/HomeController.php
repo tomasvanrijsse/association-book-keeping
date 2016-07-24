@@ -1,38 +1,26 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
-class home extends CI_Controller {
-    
-    public function __construct()
-    {
-        parent::__construct();
-        if(!isAdmin()){
-            redirect('/public_home/index');
-        }
-    }
-    
+namespace App\Http\Controllers;
+
+use App\Models\CounterSuggestion;
+use App\Models\Setting;
+use App\Models\Transaction;
+
+class HomeController extends Controller {
+
     public function index(){
-        $this->load->model('countersuggestie');
-        $this->countersuggestie->status = 1;
-        
-        $this->db->select('MAX(datum) as datum');
-        $query = $this->db->get('transactie');
-        if ($query->num_rows() > 0)
-        {
-            $row = $query->row(); 
-            $last_transaction = date('d-m-Y',strtotime($row->datum));
-        } else {
-            $last_transaction = false;
-        }
+
+        $counterSuggestionCount = CounterSuggestion::newState()->count();
+
+        $last_transaction = Transaction::max('datum');
             
         $data = array(
-            'aantalCounter' => $this->countersuggestie->countByVars(),
-            'last_import' => getSetting(LAST_IMPORT),
-            'last_transaction' => $last_transaction
+            'aantalCounter' => $counterSuggestionCount,
+            'last_import' => Setting::find(config('abk.settings.lastImport'))->value,
+            'last_transaction' => $last_transaction,
         );
-        
-        set_title('Home');
-        
-        $this->load->view('home/index',$data);
+
+        return view('/home/index',$data);
     }
     
     public function switchType(){

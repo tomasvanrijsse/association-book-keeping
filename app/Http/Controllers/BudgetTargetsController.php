@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
-use App\Models\BudgetTarget;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB;
 
-class PublicHomeController extends Controller {
+class BudgetTargetsController extends Controller {
        
     public function index(){
         $last_transaction = DB::table('transactie')->max('datum');
