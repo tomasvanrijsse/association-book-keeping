@@ -24,14 +24,3 @@ if( ! function_exists('prijsify')){
     }
     
 }
-
-if ( ! function_exists('_setvalue')){
-    function kdc_setvalue($fieldname,$default=''){
-        if (!array_key_exists($fieldname,$_POST))
-        {
-            return $default;
-        } else {
-            return $_POST[$fieldname];
-        }
-    }
-}

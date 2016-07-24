@@ -1,4 +1,6 @@
-<?php $this->load->view('segments/publicheader'); ?>
+@extends('layouts.public')
+
+@section('content')
 <div class="container">
     <div class="row">
         <div class="span6">
@@ -7,14 +9,14 @@
                 <ul class="budgettable table">
                 <?php foreach($budgetten as $budget): if($budget->account_id==1) continue;/* @var $budget budget */ ?>
                     <li>
-                        <span><?php echo $budget->naam; ?></span>
-                        <span class="saldo"><?php echo prijsify($budget->saldo); ?></span>
-                        <?php if($budget->target):?>
+                        <span>{{ $budget->naam }}</span>
+                        <span class="saldo"><?php echo $budget->saldo; ?></span>
+                        <?php if($budget->budgetTarget):?>
                         <span class="target">
                             <span class="icon icon-asterisk"></span>
                         </span>
                         <div class="target">
-                            <?php $target = $budget->target; 
+                            <?php $target = $budget->budgetTarget;
                             /* @var $target budgettarget */
                             switch($target->type):
                                 case 'vast':
@@ -41,13 +43,13 @@
                 <?php foreach($budgetten as $budget): if($budget->account_id==2) continue; /* @var $budget budget */ ?>
                     <li>
                         <span><?php echo $budget->naam; ?></span>
-                        <span class="saldo"><?php echo prijsify($budget->saldo); ?></span>
-                        <?php if($budget->target):?>
+                        <span class="saldo"><?php echo $budget->saldo; ?></span>
+                        <?php if($budget->budgetTarget):?>
                         <span class="target">
                             <span class="icon icon-asterisk"></span>
                         </span>
                         <div class="target">
-                            <?php $target = $budget->target; 
+                            <?php $target = $budget->budgetTarget;
                             /* @var $target budgettarget */
                             switch($target->type):
                                 case 'vast':
@@ -88,4 +90,13 @@
         </div>
     </div>
 </div>
-<?php $this->load->view('segments/footer');
+
+@endsection
+
+@push('stylesheets')
+<link href="/css/public_home.css" rel="stylesheet">
+@endpush
+
+@push('scripts')
+<script src="/js/public_home.js"></script>
+@endpush

@@ -72,7 +72,7 @@ if(!function_exists('print_stylesheets')){
 if(!function_exists('set_title')){
     function set_title($title){
         $CI =& get_instance();
-	  $current = ' | '.$CI->config->item('meta_title');        
+	  $current = ' | '.$CI->config->item('meta_title');
         $CI->config->set_item('meta_title', $title);
     }
 }
