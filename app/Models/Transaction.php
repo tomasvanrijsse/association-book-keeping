@@ -1,6 +1,10 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed!');
+<?php
 
-class transactie extends PNCT_Model {
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Transaction extends Model {
 
     public $id;
     public $bedrag;
