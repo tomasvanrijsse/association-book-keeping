@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Presenters\BudgetPresenter;
 use Illuminate\Database\Eloquent\Model;
 use Money\Money;
 
@@ -10,19 +11,24 @@ class Budget extends Model
 
     public $table = 'budget';
 
-    public function getSaldo()
+    /**
+     * @return Money
+     */
+    public function getSaldoAttribute()
     {
-        if (property_exists($this, '_saldo')) {
-            return $this->_saldo;
-        }
-        $sql   = 'SELECT SUM(bedrag) as saldo FROM boeking WHERE budget_id = ' . $this->id;
-        $query = $this->db->query($sql);
-        $row   = $query->row();
+        $saldo = (int) Booking::where('budget_id',$this->id)->sum('bedrag');
 
-        $this->_saldo = $row->saldo;
-
-        return Money::EUR($row->saldo * 100);
+        return Money::EUR($saldo * 100);
     }
+
+    /**
+     * @return BudgetPresenter
+     */
+    public function present()
+    {
+        return new BudgetPresenter($this);
+    }
+
 
     public function budgetTarget()
     {

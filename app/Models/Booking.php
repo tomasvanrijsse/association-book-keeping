@@ -1,22 +1,13 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed!');
+<?php
 
-class boeking extends PNCT_Model {
+namespace App\Models;
 
-    public $id;
-    public $budget_id;
-    public $bedrag;
-    public $datum;
-    public $transactie_id;
-    public $creditgroep_id;
+use Illuminate\Database\Eloquent\Model;
 
-    /** CUSTOM boeking FUNCTIONS **/
+class Booking extends Model {
 
-    /*function __construct()
-    {
-        // Call the Model constructor
-        parent::__construct();
-    }*/
-    
+    public $table = 'boeking';
+
     public function vrijSaldo(){
         if(property_exists($this,'_vrijsaldo')){
             return $this->_vrijsaldo;

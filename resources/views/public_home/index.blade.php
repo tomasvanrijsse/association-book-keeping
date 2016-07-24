@@ -10,7 +10,7 @@
                 <?php foreach($budgetten as $budget): if($budget->account_id==1) continue;/* @var $budget budget */ ?>
                     <li>
                         <span>{{ $budget->naam }}</span>
-                        <span class="saldo"><?php echo $budget->saldo; ?></span>
+                        <span class="saldo"><?php echo $budget->present()->saldo; ?></span>
                         <?php if($budget->budgetTarget):?>
                         <span class="target">
                             <span class="icon icon-asterisk"></span>
@@ -43,7 +43,7 @@
                 <?php foreach($budgetten as $budget): if($budget->account_id==2) continue; /* @var $budget budget */ ?>
                     <li>
                         <span><?php echo $budget->naam; ?></span>
-                        <span class="saldo"><?php echo $budget->saldo; ?></span>
+                        <span class="saldo"><?php echo $budget->present()->saldo; ?></span>
                         <?php if($budget->budgetTarget):?>
                         <span class="target">
                             <span class="icon icon-asterisk"></span>
