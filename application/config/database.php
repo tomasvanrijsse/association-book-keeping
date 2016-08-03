@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'bills';
-$db['default']['password'] = 'qwerty123@!';
-$db['default']['database'] = 'bills';
+$db['default']['username'] = 'samenhuis_bills';
+$db['default']['password'] = 'secret';
+$db['default']['database'] = 'samenhuis_bills';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
