@@ -6,5 +6,6 @@
 */cache/!.htaccess
 nbproject
 system
-temp
+temp/*
+!temp/.gitkeep
 .idea

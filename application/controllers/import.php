@@ -5,7 +5,7 @@ class import extends CI_Controller {
     public function upload(){
         
         $config['upload_path'] = FCPATH.'/temp/';
-        $config['allowed_types'] = 'csv|txt';
+        $config['allowed_types'] = '*';
         $config['max_size']	= '1000'; //1mb
 
         $accounts = $this->account->readAll();
