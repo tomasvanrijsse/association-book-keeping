@@ -51,13 +51,13 @@ $('ul.boeking input').change(function(){
     }
 });
 
-$('span.target').on('click',function(){
-    var id      = $(this).data('id'),
-        $stand  = $('#stand'+id+' input');
-    if($(this).data('target')){
-        $stand.val($(this).data('target')).change();
+$('span.target').on('click', function () {
+    var id = $(this).data('id'),
+        $boeking = $('#boeking' + id + ' input');
+    if ($(this).data('target')) {
+        $boeking.val($(this).data('target')).change();
     }
-})
+});
 
 $('ul.stand input').change(function(data){
     var id      = $(this).data('id'),
