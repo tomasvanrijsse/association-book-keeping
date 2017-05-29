@@ -109,13 +109,20 @@ if(!function_exists('print_description')){
 
 if(!function_exists('print_account_switch')){
     function print_account_switch($location=false){
+        $CI =& get_instance();
+        $accounts = $CI->account->readAll();
+
+        if(count($accounts == 1)) {
+            return;
+        }
+
         enqueue_customscript("$('#switch select').on('change', function (){
             $.post('/home/switchType',{account_id:$(this).val()},function(){".($location?'document.location.pathname="'.$location.'"':'document.location.reload()')."});
         });");
-        $CI =& get_instance();
+
         $current_id = ACCOUNT_ID;
         echo '<div id="switch"><select>';
-        foreach($CI->account->readAll() as $account){
+        foreach($accounts as $account){
             echo '<option '.($current_id==$account->id?'selected="selected"':'').' value="'.$account->id.'">'.$account->naam.'</option>';
         }
         echo '</select></div>';
