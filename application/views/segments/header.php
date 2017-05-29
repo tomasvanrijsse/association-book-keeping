@@ -17,7 +17,7 @@
                     array('name'=>'<i class="icon-home"></i> Home','url'=>'home'),
                     array('name'=>'<i class="icon-minus-sign"></i> Debet','url'=>'debet'),
                     array('name'=>'<i class="icon-plus-sign"></i> Credit','url'=>'credit'),
-                    array('name'=>'<i class="icon-user"></i> Leden','url'=>'leden'),
+                    //array('name'=>'<i class="icon-user"></i> Leden','url'=>'leden'),
                    // array('name'=>'Gedeelde posten','url'=>'gedeeldeposten'),
                    // array('name'=>'Ruimtes','url'=>'ruimtes'),
                 );

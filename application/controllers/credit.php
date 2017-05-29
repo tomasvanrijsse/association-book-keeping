@@ -127,14 +127,6 @@ class credit extends budgetten {
         $data['creditgroups'] = $this->creditgroep->readAllByVars();
         $data['transacties'] = $this->transactie->getOpenCredit();
         
-        $lastcgtime = 0;
-        foreach($data['creditgroups'] as $cg){
-            $time = strtotime($cg->datum);
-            if($time>$lastcgtime && $cg->saldo != $cg->credit){
-                $lastcgtime = $time;                
-            }
-        }
-
         set_title('Credit | Groepen verdelen');
         
         enqueue_script('/js/credit_groepen_verdelen.js');
