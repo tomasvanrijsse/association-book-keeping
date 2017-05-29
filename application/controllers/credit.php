@@ -134,17 +134,7 @@ class credit extends budgetten {
                 $lastcgtime = $time;                
             }
         }
-                
-        $this->load->model('budgettarget');
-        foreach($data['budgetten'] as &$budget){
-            $budgettarget = new budgettarget();
-            $budgettarget->budget_id = $budget->id;
-            $budgettarget->active = 1;
-            $budgettarget->readByVars();
-            
-            $budget->target = $budgettarget->bedrag;
-        }
-        
+
         set_title('Credit | Groepen verdelen');
         
         enqueue_script('/js/credit_groepen_verdelen.js');

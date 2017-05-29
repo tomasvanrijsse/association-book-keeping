@@ -56,6 +56,7 @@ $('span.target').on('click', function () {
         $boeking = $('#boeking' + id + ' input');
     if ($(this).data('target')) {
         $boeking.val($(this).data('target')).change();
+        resetTotaal();
     }
 });
 
@@ -115,7 +116,7 @@ $('#saveboekingen').click(function(){
     if($(this).hasClass('disabled')) return false;
     
     $('.boeking input').each(function(){
-        if($(this).val() > 0){ 
+        if($(this).val() >= 0){
             var $input  = $(this),
                 id      = $input.data('id'),
                 $saldo  = $('#saldo'+$(this).data('id')),
