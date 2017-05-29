@@ -20,7 +20,7 @@
             <div class="table thead">
                 <span style="width:211px">Naam</span>
                 <span style="width:100px">Stand v. toen</span>
-                <span style="width:100px">Target</span>
+                <span style="width:100px">Increment</span>
             </div>
             <ul id="budgetten" class="table">
             <?php foreach($budgetten as $budget): /* @var $budget budget */ ?>

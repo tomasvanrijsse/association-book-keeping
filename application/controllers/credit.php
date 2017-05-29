@@ -142,7 +142,7 @@ class credit extends budgetten {
             $budgettarget->active = 1;
             $budgettarget->readByVars();
             
-            $budget->target = $budgettarget->current_target($budget->saldo,$lastcgtime);
+            $budget->target = $budgettarget->bedrag;
         }
         
         set_title('Credit | Groepen verdelen');
