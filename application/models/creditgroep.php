@@ -54,7 +54,7 @@ LEFT JOIN (SELECT ROUND(SUM(bedrag),2) as bedrag,creditgroep_id FROM transactie 
 ON credit.creditgroep_id = c2.id
 LEFT JOIN (SELECT ROUND(SUM(bedrag),2) as bedrag,creditgroep_id FROM boeking GROUP BY creditgroep_id) as debet
 ON debet.creditgroep_id = c2.id
-ORDER BY datum DESC';
+ORDER BY datum DESC, id DESC';
         return $this->db->query($sql);
     }
     
