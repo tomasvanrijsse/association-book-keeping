@@ -26,13 +26,15 @@
     <div class="row">
         <div class="span5">
             <div class="table thead">
-                <span style="width:248px">Naam</span>
-                <span style="width:100px">inhoud</span>
+                <span style="width:170px">Naam</span>
+                <span style="width:80px">Saldo</span>
+                <span style="width:80px">Rest</span>
             </div>
             <ul id="budgetten" class="table">
             <?php foreach($creditgroups as $creditgroup): /* @var $creditgroup creditgroup */ ?>
                 <li class="dropable <?php echo ($creditgroup->id==$active_groep?'current':''); ?>" data-saldo="<?php echo round ($creditgroup->saldo); ?>" data-id="<?php echo $creditgroup->id; ?>">
                     <span><a href="/credit/groep_detail/<?php echo $creditgroup->id; ?>"><?php echo $creditgroup->naam; ?></a></span>
+                    <span><?php  echo prijsify($creditgroup->credit); ?></span>
                     <span class="clearfix saldo"><?php
                     if(round($creditgroup->saldo)==0 && $creditgroup->credit>0){
                         echo '&#10003;&nbsp;';

@@ -19,10 +19,10 @@
 }
 
 #budgetten span:nth-child(1){
-    width:248px;
+    width:170px;
 }
-#budgetten span:nth-child(2){
-    width:100px;
+#budgetten span:nth-child(n+2){
+    width:80px;
 }
 
 #transactions span:nth-child(1){
