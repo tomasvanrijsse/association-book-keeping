@@ -71,7 +71,7 @@ class transactie extends PNCT_Model {
     }
     
     public function getGroepTransacties($groep_id){
-        $this->db->order_by('datum DESC');
+        $this->db->order_by('van_naam');
         $this->db->where('creditgroep_id',$groep_id);
         return $this->transactie->readAll();
     }

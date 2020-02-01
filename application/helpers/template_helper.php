@@ -112,7 +112,7 @@ if(!function_exists('print_account_switch')){
         $CI =& get_instance();
         $accounts = $CI->account->readAll();
 
-        if(count($accounts == 1)) {
+        if(count($accounts)== 1) {
             return;
         }
 

@@ -66,7 +66,7 @@
             <div class="table thead">
                 <span style="width:76px">Datum</span>
                 <span style="width:206px">Beschrijving</span>
-                <span style="width:140px">Naar</span>
+                <span style="width:140px">Van</span>
                 <span style="width:50px">Bedrag</span>
             </div>
             <ul id="transactions" class="dropable table">
