@@ -4,21 +4,16 @@
  * and open the template in the editor.
  */
 if ( ! function_exists('dump')){
-    function dump($var,$save=true){
-        if($save
-            || $_SERVER['REMOTE_ADDR'] == '195.240.225.6'   // marijkestr. hdnxvld
-            || $_SERVER['REMOTE_ADDR'] == '217.77.159.247'  // CF
-            || $_SERVER['REMOTE_ADDR'] == '83.137.149.45'   ) { //BOAZ
+    function dump($var){
+        $calledFrom = debug_backtrace();
+        echo '<strong>' . substr(str_replace(SELF, '', $calledFrom[0]['file']), 1) . '</strong>';
+        echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
 
-            $calledFrom = debug_backtrace();
-            echo '<strong>' . substr(str_replace(SELF, '', $calledFrom[0]['file']), 1) . '</strong>';
-            echo ' (line <strong>' . $calledFrom[0]['line'] . '</strong>)';
-
-            echo '<pre>';
-            print_r($var);
-            echo "</pre>";
-        }
+        echo '<pre>';
+        print_r($var);
+        echo "</pre>";
     }
+    function dd($var) { dump ($var); die; }
 }
 
 // ValidURL
