@@ -40,16 +40,5 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="span6">
-            <h3>Saldo per budget</h3>
-            <div class="well">
-                <a href="/public_home" class="btn btn-default">Naar overzicht</a>
-            </div>
-        </div>
-        <div class="span6">
-            
-        </div>
-    </div>
 </div>
 <?php $this->load->view('segments/footer'); ?>

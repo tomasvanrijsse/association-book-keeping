@@ -1,7 +1,23 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class budgetten extends PNCT_Controller {
-   
+
+    public function index(){
+        $budget = new budget();
+        $this->db->order_by('naam');
+        $budgetten = $budget->readAll();
+
+        $data = array(
+            'budgetten' => $budgetten
+        );
+
+        set_title('Home');
+        enqueue_stylesheet('/css/public_home.css');
+        enqueue_script('/js/public_home.js');
+
+        $this->load->view('budgets/index',$data);
+    }
+
     public function addBudget(){
         $budget = new budget();
         $budget->naam = $this->input->post('naam');

@@ -54,11 +54,3 @@ if ( ! function_exists('isactive')){
         }
     }
 }
-
-if( !function_exists('isAdmin')){
-    function isAdmin(){
-        $CI =& get_instance();
-        $bool = ($CI->session->userdata('isAdmin') == 'true');
-        return $bool;
-    }
-}

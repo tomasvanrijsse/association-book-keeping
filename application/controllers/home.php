@@ -2,14 +2,6 @@
 
 class home extends CI_Controller {
     
-    public function __construct()
-    {
-        parent::__construct();
-        if(!isAdmin()){
-            redirect('/public_home/index');
-        }
-    }
-    
     public function index(){
         $this->load->model('countersuggestie');
         $this->countersuggestie->status = 1;

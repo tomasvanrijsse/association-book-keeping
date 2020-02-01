@@ -1,4 +1,4 @@
-<?php $this->load->view('segments/publicheader'); ?>
+<?php $this->load->view('segments/header'); ?>
 <div class="container">
     <div class="row">
         <div class="span7">
@@ -22,21 +22,6 @@
                     </li>
                 <?php endforeach; ?>
                 </ul>
-            </div>
-        </div>
-        <div class="span5">
-            <h3 style="color:white;">.</h3>
-            <div class="well">
-                <table>
-                    <tr>
-                        <td>De laatste import was op: </td>
-                        <td><?php echo $last_import; ?></td>
-                    </tr>
-                    <tr>
-                        <td>De laatste transactie is van: </td>
-                        <td><?php echo $last_transaction; ?></td>
-                    </tr>
-                </table>
             </div>
         </div>
     </div>
