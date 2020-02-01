@@ -6,7 +6,6 @@ class countersuggestie extends PNCT_Model {
     public $status;
     public $bedrag;
     public $rekeningnaam;
-    public $account_id;
     public $gewicht;
     public $transactie_id;
 
@@ -39,14 +38,14 @@ class countersuggestie extends PNCT_Model {
                 
         $transactionSets = array();
         $sql = "
-SELECT bedrag,van_naam,account_id, SUM(saldo) as optelling, GROUP_CONCAT(t_id) as transaction_ids, SUM(IF(saldo<0,1,0)) as aantaldebit, SUM(IF(saldo>0,1,0)) as aantalcredit
+SELECT bedrag,van_naam, SUM(saldo) as optelling, GROUP_CONCAT(t_id) as transaction_ids, SUM(IF(saldo<0,1,0)) as aantaldebit, SUM(IF(saldo>0,1,0)) as aantalcredit
 FROM (
- SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, a.id as account_id, a.rekeningnr, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo
+ SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo
  FROM transactie t
  JOIN account a ON t.naar = a.rekeningnr 
  WHERE status = 1 AND t.datum > DATE_ADD(NOW(), INTERVAL -1 YEAR)
  ) as incsaldo
- GROUP BY account_id, %s
+ GROUP BY %s
  HAVING aantaldebit > 0 AND aantalcredit > 0";
         $query = $this->db->query(sprintf($sql,'van,bedrag'));
         $this->createBatch($query,1);
@@ -55,16 +54,15 @@ FROM (
         //$query = $this->db->query(sprintf($sql,'van'));
         //$this->createBatch($query,4);
         
-        $lidsql = "SELECT bedrag,van_naam,account_id, SUM(saldo) as optelling, GROUP_CONCAT(t_id) as transaction_ids, SUM(IF(saldo<0,1,0)) as aantaldebit, SUM(IF(saldo>0,1,0)) as aantalcredit
+        $lidsql = "SELECT bedrag,van_naam, SUM(saldo) as optelling, GROUP_CONCAT(t_id) as transaction_ids, SUM(IF(saldo<0,1,0)) as aantaldebit, SUM(IF(saldo>0,1,0)) as aantalcredit
 FROM (
- SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, a.id as account_id, a.rekeningnr, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo, br.lid_id
+ SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo, br.lid_id
  FROM transactie t
- JOIN account a ON t.naar = a.rekeningnr 
  JOIN bankrekening br ON br.nummer = t.van
  LEFT JOIN boeking b ON b.transactie_id = t.id
  WHERE b.budget_id IS NULL AND t.status = 1 AND t.datum > DATE_ADD(NOW(), INTERVAL -1 YEAR)
  ) as incsaldo
- GROUP BY account_id, lid_id
+ GROUP BY lid_id
  HAVING aantaldebit > 0 AND aantalcredit > 0";
         // puur op lid geeft te veel overeenkomsten
         //$query = $this->db->query($lidsql);
@@ -83,7 +81,6 @@ FROM (
                 $countersug->rekeningnaam = $row->van_naam;
             if($gewicht==1||$gewicht==3)
                 $countersug->bedrag       = $row->bedrag;
-            $countersug->account_id = $row->account_id;
             $countersug->gewicht    = $gewicht;
             
             $countersug->transaction_ids = $row->transaction_ids;
@@ -108,9 +105,8 @@ FROM (
         $sql = "SELECT GROUP_CONCAT(cst.transactie_id) as ids
 FROM countersuggestie cs
 JOIN countersuggestie_transactie cst ON cs.id = cst.counter_id
-WHERE account_id = %d
 GROUP BY cs.id";
-        $query = $this->db->query(sprintf($sql,$this->account_id));
+        $query = $this->db->query($sql);
         foreach($query->result() as $countersug){
             $ids = explode(',',$countersug->ids);
             $has_all = true;

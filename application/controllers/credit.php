@@ -81,7 +81,6 @@ class credit extends budgetten {
         $this->load->model('creditgroep');
         $groep = new creditgroep();
         $groep = $groep->read($creditgroep_id);
-        //$groep->account_id = ACCOUNT_ID;
         //$groep->naam = html_entity_decode(rawurldecode($budget_name));
         if($groep){
             set_title('Credit | Groep | '.ucfirst($groep->naam));
@@ -97,7 +96,6 @@ class credit extends budgetten {
         $groep = new creditgroep();
         $groep->naam = $this->input->post('naam');
         $groep->status = 1;
-        $groep->account_id = ACCOUNT_ID;
         $groep->jaar = date('Y');
         if($response = $groep->create()){
             redirect('/credit/groepen');
@@ -135,9 +133,7 @@ class credit extends budgetten {
         $result = array('budgetten'=>array(),'boekingen'=>array());
         
         $budget = new budget();
-        $budget->account_id = ACCOUNT_ID;
-
-        $budgets = $budget->readAllByVars();
+        $budgets = $budget->readAll();
         foreach($budgets as $key => $budget){
             $result['budgetten'][$budget->id] = round($budget->saldo,2);
         }

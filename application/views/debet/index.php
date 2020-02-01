@@ -10,7 +10,6 @@
     </div>
     <?php endif; ?>
     <div class="row" id="dragcontainment">
-        <?php print_account_switch('/debet'); ?>
         <div class="span5">
             <h3>Budget balans</h3>
             <div class="table thead">

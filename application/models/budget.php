@@ -3,7 +3,6 @@
 class budget extends PNCT_Model {
 
     public $id;
-    public $account_id;
     public $naam;
 
     /** CUSTOM post FUNCTIONS **/

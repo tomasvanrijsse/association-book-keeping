@@ -10,7 +10,7 @@
                         <span class="saldo"><strong>Saldo</strong></span>
                         <span class="target"><strong>Increment</strong></span>
                     </li>
-                <?php foreach($budgetten as $budget): if($budget->account_id==2) continue; /* @var $budget budget */ ?>
+                <?php foreach($budgetten as $budget): /* @var $budget budget */ ?>
                     <li>
                         <span><?php echo $budget->naam; ?></span>
                         <span class="saldo"><?php echo prijsify($budget->saldo); ?></span>

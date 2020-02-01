@@ -5,7 +5,6 @@ class creditgroep extends PNCT_Model {
     public $id;
     public $naam;
     public $status;
-    public $account_id;
     public $jaar;
 
     /** CUSTOM creditgroup FUNCTIONS **/

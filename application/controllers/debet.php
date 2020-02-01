@@ -45,7 +45,6 @@ class debet extends budgetten {
         
     public function detail($budget_name){
         $budget = new budget();
-        $budget->account_id = ACCOUNT_ID;
         $budget->naam = html_entity_decode(rawurldecode($budget_name));
         if($budget->readByVars()){
             set_title('Debet | '.ucfirst($budget->naam));

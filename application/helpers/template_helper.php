@@ -36,15 +36,6 @@ if(!function_exists('enqueue_stylesheet')){
     }
 }
 
-if(!function_exists('enqueue_customscript')){
-    function enqueue_customscript($script){
-        $CI =& get_instance();
-        $queue = $CI->config->item('custom_scripts');
-        $queue[] = $script;
-        $CI->config->set_item('custom_scripts', $queue);
-    }
-}
-
 if(!function_exists('print_scripts')){
     function print_scripts(){
         $CI =& get_instance();
@@ -104,27 +95,5 @@ if(!function_exists('print_description')){
         if(strlen($desc)>0){
             echo '<meta name="description" content="'.$desc.'">';
         }
-    }
-}
-
-if(!function_exists('print_account_switch')){
-    function print_account_switch($location=false){
-        $CI =& get_instance();
-        $accounts = $CI->account->readAll();
-
-        if(count($accounts)== 1) {
-            return;
-        }
-
-        enqueue_customscript("$('#switch select').on('change', function (){
-            $.post('/home/switchType',{account_id:$(this).val()},function(){".($location?'document.location.pathname="'.$location.'"':'document.location.reload()')."});
-        });");
-
-        $current_id = ACCOUNT_ID;
-        echo '<div id="switch"><select>';
-        foreach($accounts as $account){
-            echo '<option '.($current_id==$account->id?'selected="selected"':'').' value="'.$account->id.'">'.$account->naam.'</option>';
-        }
-        echo '</select></div>';
     }
 }

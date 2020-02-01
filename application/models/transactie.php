@@ -17,20 +17,7 @@ class transactie extends PNCT_Model {
 
     /** CUSTOM transactie FUNCTIONS **/
 
-    /*function __construct()
-    {
-        // Call the Model constructor
-        parent::__construct();
-    }*/
-       
-    private function setAccount(){
-        $account = new account();
-        $account->read(ACCOUNT_ID);
-        $this->db->where('naar',$account->rekeningnr);
-    }
-    
     public function getFromLid($id,$year,$type){
-        $this->setAccount();
         $this->db->order_by('datum DESC');
         $this->db->where('YEAR(datum)',$year);
         $this->db->where('bankrekening_id IN (SELECT id FROM bankrekening WHERE lid_id = '.$id.')');
@@ -40,7 +27,6 @@ class transactie extends PNCT_Model {
     }
     
     public function getOpenDebet(){
-        $this->setAccount();
         $this->db->order_by('datum DESC');
         $this->db->where('type','debet');
         $this->db->where('id NOT IN (SELECT transactie_id FROM boeking WHERE transactie_id IS NOT NULL AND bedrag < 0)');
@@ -49,7 +35,6 @@ class transactie extends PNCT_Model {
     }
     
     public function getOpenCredit(){
-        $this->setAccount();
         $this->db->select('transactie.*');
         $this->db->order_by('transactie.datum DESC');
         $this->db->where('type','credit');

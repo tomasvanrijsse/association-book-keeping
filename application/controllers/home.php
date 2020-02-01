@@ -26,12 +26,7 @@ class home extends CI_Controller {
         
         $this->load->view('home/index',$data);
     }
-    
-    public function switchType(){
-        $this->session->set_userdata('account_id',$this->input->post('account_id'));
-    }
 
- 
     public function rescanCounter(){
         //find new counter transactions
         $this->load->model('countersuggestie');
@@ -46,7 +41,7 @@ class home extends CI_Controller {
 FROM transactie t
 INNER JOIN boeking b ON b.transactie_id = t.id
 INNER JOIN budget p ON p.id = b.budget_id
-WHERE type = "credit" AND naar = "%s" AND t.status IN (1,2)
+WHERE type = "credit" AND t.status IN (1,2)
 
 UNION 
 SELECT b.bedrag,MIN(t.datum) as datum, p.naam
@@ -54,7 +49,7 @@ FROM boeking b
 INNER JOIN creditgroep c ON c.id = b.creditgroep_id
 INNER JOIN budget p ON p.id = b.budget_id
 INNER JOIN transactie t ON t.creditgroep_id = c.id
-WHERE b.creditgroep_id IS NOT NULL AND c.account_id =  %d
+WHERE b.creditgroep_id IS NOT NULL
 GROUP BY b.id
 ';
         
@@ -63,24 +58,18 @@ FROM transactie t
 LEFT JOIN boeking b ON b.transactie_id = t.id
 LEFT JOIN budget p ON p.id = b.budget_id 
 LEFT JOIN countersuggestie cs ON cs.transactie_id = t.id
-WHERE type = "debet" AND naar = "%s"
+WHERE type = "debet"
 AND t.status IN (1,2) /* voor actieve en ge*merged*e transacties */
 ORDER BY datum';
         
-        $personal = sprintf($sql_credit,"NL73TRIO0198483325",2).' UNION '.sprintf($sql_debit,"NL73TRIO0198483325");
-        $business = sprintf($sql_credit,"NL97TRIO0198507046",1).' UNION '.sprintf($sql_debit,"NL97TRIO0198507046");
+        $business = $sql_credit.' UNION '.$sql_debit;
         
         //debit only
         //$personal = sprintf($sql_debit,"NL73TRIO0198483325");
         //$business = sprintf($sql_debit,"NL97TRIO0198507046");
-        
-        
-        $business2 = "SELECT bedrag,datum, `type` as budget FROM transactie WHERE naar = 'NL97TRIO0198507046'";
-        
-        $query = $this->db->query($personal);
-        $pivot1 = $this->buildPivot($query->result());
-        $this->dumpPivot($this->sumPivot($pivot1));
-        echo '<hr>';
+
+        $business2 = "SELECT bedrag,datum, `type` as budget FROM transactie";
+
         $query2 = $this->db->query($business);
         $pivot2 = $this->buildPivot($query2->result());
         $this->dumpPivot($this->sumPivot($pivot2));

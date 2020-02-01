@@ -10,7 +10,6 @@
     </div>
     <?php endif; ?>
     <div class="row">
-        <?php print_account_switch(); ?>
         <div class="span6">
             <h3><?php if($groep){ echo $groep->naam; }else{ echo 'Groepen';}?></h3>
         </div>

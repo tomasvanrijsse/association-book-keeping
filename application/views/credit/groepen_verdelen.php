@@ -1,7 +1,6 @@
 <?php $this->load->view('segments/header'); ?>
 <div class="container">
     <div class="row">
-        <?php print_account_switch(); ?>
         <div class="span6">
             <h3>Budget balans</h3>
         </div>

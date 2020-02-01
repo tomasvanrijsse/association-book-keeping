@@ -21,11 +21,11 @@ class boeking extends PNCT_Model {
         if(property_exists($this,'_vrijsaldo')){
             return $this->_vrijsaldo;
         }
-        $sql1 = 'SELECT SUM(bedrag) as open FROM transactie WHERE type = \'credit\' AND status = 1 AND naar = (SELECT rekeningnr FROM account WHERE id = '.ACCOUNT_ID.')';
+        $sql1 = 'SELECT SUM(bedrag) as open FROM transactie WHERE type = \'credit\' AND status = 1';
         $query1 = $this->db->query($sql1);
         $row1 = $query1->row(); 
         
-        $sql2 = 'SELECT SUM(bedrag) as used FROM boeking WHERE budget_id IN (SELECT id FROM budget WHERE budget.account_id = '.ACCOUNT_ID.')';
+        $sql2 = 'SELECT SUM(bedrag) as used FROM boeking';
         $query2 = $this->db->query($sql2);
         $row2 = $query2->row(); 
         
