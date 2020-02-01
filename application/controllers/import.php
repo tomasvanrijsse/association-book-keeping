@@ -53,11 +53,14 @@ class import extends CI_Controller {
                 
                 if(!$transactie->cleanExists()){
                     $budget_id = false;
-                    if($transactie->van == 'RABONL2U NL36RABO0128073454' && $transactie->type == 'debet' ){
+                    if($transactie->van == '' && $transactie->type == 'debet' && strpos($transactie->description, 'hypotheek') > 1 ){
                         $budget_id = 2; // Triodos Hypotheek
                     }
+                    if($transactie->van == '' && $transactie->type == 'debet' && $transactie->bedrag < 50 ){
+                        $budget_id = 26; // Triodos bank kosten
+                    }
                     if($transactie->van == 'INGBNL2A NL98INGB0000845745' && $transactie->type == 'debet' ){
-                        $budget_id = 7; // UPC internet
+                        $budget_id = 7; // Ziggo internet
                     }
                     if($transactie->van == 'ABNANL2A NL98ABNA0513804498' && $transactie->type == 'debet' ){
                         $budget_id = 6; // nedasco
@@ -67,6 +70,12 @@ class import extends CI_Controller {
                     }
                     if($transactie->van == 'RABONL2U NL28RABO0134901428' && $transactie->type == 'debet' ){
                         $budget_id = 8; // ambachstheer
+                    }
+                    if($transactie->type == 'debet' && $transactie->description == 'Afvalstoffenheffing' ){
+                        $budget_id = 3; // gemeentelijke belastingen
+                    }
+                    if($transactie->type == 'debet' && strpos($transactie->description, 'glazenwasser') >= 0 ){
+                        $budget_id = 27; // glazenwasser
                     }
                     
                     $bankrek = new bankrekening();
