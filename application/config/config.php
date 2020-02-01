@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://samenhuis-bills.dev/';
+$config['base_url']	= 'https://samenhuis-bills.test';
 
 /*
 |--------------------------------------------------------------------------
