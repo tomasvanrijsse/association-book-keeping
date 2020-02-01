@@ -55,10 +55,8 @@ class credit extends budgetten {
     public function groepen($groep=null){
         $data=array();
         $this->load->model('creditgroep');
-        $this->creditgroep->account_id = ACCOUNT_ID;
-        $this->db->order_by('id DESC');
-        $data['creditgroups'] = $this->creditgroep->readAllByVars();
-        
+        $data['creditgroups'] = $this->creditgroep->query();
+
         if(is_null($groep)){
             $data['transacties'] = $this->transactie->getOpenCredit();
             $data['groep'] = false;
@@ -82,7 +80,7 @@ class credit extends budgetten {
     public function groep_detail($creditgroep_id){
         $this->load->model('creditgroep');
         $groep = new creditgroep();
-        $groep->read($creditgroep_id);
+        $groep = $groep->read($creditgroep_id);
         //$groep->account_id = ACCOUNT_ID;
         //$groep->naam = html_entity_decode(rawurldecode($budget_name));
         if($groep){
@@ -122,9 +120,7 @@ class credit extends budgetten {
     public function groepen_verdelen(){
         $data = $this->_initData();
         $this->load->model('creditgroep');
-        $this->creditgroep->account_id = ACCOUNT_ID;
-        $this->db->order_by('id DESC');
-        $data['creditgroups'] = $this->creditgroep->readAllByVars();
+        $data['creditgroups'] = $this->creditgroep->query();
         $data['transacties'] = $this->transactie->getOpenCredit();
         
         set_title('Credit | Groepen verdelen');
@@ -140,6 +136,7 @@ class credit extends budgetten {
         
         $budget = new budget();
         $budget->account_id = ACCOUNT_ID;
+
         $budgets = $budget->readAllByVars();
         foreach($budgets as $key => $budget){
             $result['budgetten'][$budget->id] = round($budget->saldo,2);
