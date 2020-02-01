@@ -5,6 +5,7 @@ class budgetten extends PNCT_Controller {
     public function addBudget(){
         $budget = new budget();
         $budget->naam = $this->input->post('naam');
+        $budget->verborgen = 0;
         $budget->account_id = ACCOUNT_ID;
         if($budget->create()){
             $this->index();
@@ -17,6 +18,7 @@ class budgetten extends PNCT_Controller {
         $data = array();
         $budget = new budget();
         $budget->account_id = ACCOUNT_ID;
+        $budget->verborgen = 0;
         $this->db->order_by('naam');
         $data['budgetten'] = $budget->readAllByVars();
         return $data;
