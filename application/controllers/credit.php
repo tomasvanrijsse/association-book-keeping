@@ -171,7 +171,7 @@ class credit extends budgetten {
             $creditgroep = new creditgroep($this->input->post('creditgroep_id'));
         
             $boeking->bedrag = $this->input->post('amount');
-            $boeking->datum = $creditgroep->datum;
+            $boeking->datum = date('Y-m-d');
             $boeking->create();
         }
         

@@ -56,13 +56,12 @@ FROM (
         
         $lidsql = "SELECT bedrag,van_naam, SUM(saldo) as optelling, GROUP_CONCAT(t_id) as transaction_ids, SUM(IF(saldo<0,1,0)) as aantaldebit, SUM(IF(saldo>0,1,0)) as aantalcredit
 FROM (
- SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo, br.lid_id
+ SELECT t.id As t_id, t.bedrag,t.van,t.van_naam, case `type` WHEN 'credit' THEN bedrag WHEN 'debet' THEN bedrag * -1 END as saldo,
  FROM transactie t
- JOIN bankrekening br ON br.nummer = t.van
  LEFT JOIN boeking b ON b.transactie_id = t.id
  WHERE b.budget_id IS NULL AND t.status = 1 AND t.datum > DATE_ADD(NOW(), INTERVAL -1 YEAR)
  ) as incsaldo
- GROUP BY lid_id
+ GROUP BY incsaldo.van
  HAVING aantaldebit > 0 AND aantalcredit > 0";
         // puur op lid geeft te veel overeenkomsten
         //$query = $this->db->query($lidsql);

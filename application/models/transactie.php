@@ -11,21 +11,10 @@ class transactie extends PNCT_Model {
     public $description;
     public $transactietype;
     public $type;
-    public $bankrekening_id;
     public $creditgroep_id;
     public $status;
 
     /** CUSTOM transactie FUNCTIONS **/
-
-    public function getFromLid($id,$year,$type){
-        $this->db->order_by('datum DESC');
-        $this->db->where('YEAR(datum)',$year);
-        $this->db->where('bankrekening_id IN (SELECT id FROM bankrekening WHERE lid_id = '.$id.')');
-        $this->db->where('status >=',1);
-        $this->db->where('type',$type);
-        return $this->readAll();
-    }
-    
     public function getOpenDebet(){
         $this->db->order_by('datum DESC');
         $this->db->where('type','debet');
@@ -65,7 +54,7 @@ class transactie extends PNCT_Model {
     function cleanExists(){
         $this->db->from($this->getTableName());
         foreach($this as $attr => $value){
-            if(isset($value) && property_exists($this, $attr) && !in_array($attr,array('bankrekening_id','status'))){
+            if(isset($value) && property_exists($this, $attr) && !in_array($attr,array('status'))){
                 $this->db->where($this->getTableName().'.'.$attr,$value);
             }
         }

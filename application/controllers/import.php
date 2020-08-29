@@ -7,8 +7,6 @@ class import extends CI_Controller {
         $config['upload_path'] = FCPATH.'/temp/';
         $config['allowed_types'] = '*';
         $config['max_size']	= '1000'; //1mb
-
-        $accounts = $this->account->readAll();
         
         $this->load->library('upload', $config);
 
@@ -45,12 +43,6 @@ class import extends CI_Controller {
                 $transactie->bedrag = str_replace(',','.',str_replace('.','',$transactie->bedrag));
                 $transactie->status = 1;
                 
-                foreach($accounts as $account){
-                    if(strpos($transactie->van,$account->spaarrekening) !== FALSE || strpos($transactie->naar,$account->spaarrekening)!== FALSE){
-                        $transactie->status = -1;//spaar rekening acties verbergen
-                    }
-                }
-                
                 if(!$transactie->cleanExists()){
                     $budget_id = false;
                     if($transactie->van == '' && $transactie->type == 'debet' && strpos($transactie->description, 'hypotheek') > 1 ){
@@ -62,8 +54,8 @@ class import extends CI_Controller {
                     if($transactie->van == 'INGBNL2A NL98INGB0000845745' && $transactie->type == 'debet' ){
                         $budget_id = 7; // Ziggo internet
                     }
-                    if($transactie->van == 'ABNANL2A NL98ABNA0513804498' && $transactie->type == 'debet' ){
-                        $budget_id = 6; // nedasco
+                    if($transactie->van == 'INGBNL2A NL32INGB0651754763' && $transactie->type == 'debet' ){
+                        $budget_id = 6; // AM assuradeuren
                     }
                     if($transactie->van == 'INGBNL2A NL18INGB0005309282' || $transactie->van == 'INGBNL2A NL13INGB0000008710'){
                         $budget_id = 4; // greenchoice of evides
@@ -71,18 +63,23 @@ class import extends CI_Controller {
                     if($transactie->van == 'RABONL2U NL28RABO0134901428' && $transactie->type == 'debet' ){
                         $budget_id = 8; // ambachstheer
                     }
-                    if($transactie->type == 'debet' && $transactie->description == 'Afvalstoffenheffing' ){
+                    if(
+                        ($transactie->type == 'debet' && strpos(strtolower($transactie->description),'afvalstoffenheffing') !== false) ||
+                        ($transactie->type == 'debet' && $transactie->van == 'BNGHNL2G NL81BNGH0285084321') ||
+                        ($transactie->type == 'debet' && $transactie->van == 'ABNANL2A NL97ABNA0644512113')
+                    ){
                         $budget_id = 3; // gemeentelijke belastingen
                     }
-                    if($transactie->type == 'debet' && strpos($transactie->description, 'glazenwasser') >= 0 ){
+                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description),'boodschappen') !== false){
+                        $budget_id = 22; // Boodschappen
+                    }
+                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'glazenwasser') >= 0 ){
                         $budget_id = 27; // glazenwasser
                     }
-                    
-                    $bankrek = new bankrekening();
-                    $bankrek->nummer = $line['van'];
-                    if($bankrek->readByVars()){
-                        $transactie->bankrekening_id = $bankrek->id;
+                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'schoonmaak') >= 0 ){
+                        $budget_id = 28;
                     }
+                    
                     if($transactie->create()){
                         if($budget_id){
                             $boeking = new boeking();

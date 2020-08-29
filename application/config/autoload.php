@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('bankrekening','boeking','inkomen','lid','budget','ruimte','transactie','account');
+$autoload['model'] = array('boeking','budget','transactie');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */
