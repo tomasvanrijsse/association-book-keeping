@@ -45,7 +45,13 @@ class import extends CI_Controller {
                 
                 if(!$transactie->cleanExists()){
                     $budget_id = false;
-                    if($transactie->van == '' && $transactie->type == 'debet' && strpos($transactie->description, 'hypotheek') > 1 ){
+                    if(
+                        $transactie->type == 'debet' &&
+                        (
+                            $transactie->van == 'TRIONL2U NL20TRIO2205459384' || 
+                            $transactie->van == 'TRIONL2U NL42TRIO2205459376'
+                        ) 
+                    ){
                         $budget_id = 2; // Triodos Hypotheek
                     }
                     if($transactie->van == '' && $transactie->type == 'debet' && $transactie->bedrag < 50 ){
@@ -64,19 +70,22 @@ class import extends CI_Controller {
                         $budget_id = 8; // ambachstheer
                     }
                     if(
-                        ($transactie->type == 'debet' && strpos(strtolower($transactie->description),'afvalstoffenheffing') !== false) ||
-                        ($transactie->type == 'debet' && $transactie->van == 'BNGHNL2G NL81BNGH0285084321') ||
-                        ($transactie->type == 'debet' && $transactie->van == 'ABNANL2A NL97ABNA0644512113')
+                    	$transactie->type == 'debet' && 
+                        (
+                        	strpos(strtolower($transactie->description),'afvalstoffenheffing') !== false ||
+                        	$transactie->van == 'BNGHNL2G NL81BNGH0285084321' ||
+                        	$transactie->van == 'ABNANL2A NL97ABNA0644512113'
+                    	)
                     ){
                         $budget_id = 3; // gemeentelijke belastingen
                     }
                     if($transactie->type == 'debet' && strpos(strtolower($transactie->description),'boodschappen') !== false){
                         $budget_id = 22; // Boodschappen
                     }
-                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'glazenwasser') >= 0 ){
+                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'glazenwasser') !== false ){
                         $budget_id = 27; // glazenwasser
                     }
-                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'schoonmaak') >= 0 ){
+                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'schoonmaak') !== false ){
                         $budget_id = 28;
                     }
                     
