@@ -1,0 +1,16 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - %currentWorkingDirectory%
+
+    level: 8
+
+    excludePaths:
+        - tests/
+        - vendor/
+        - storage/
+
+    checkMissingIterableValueType: true
