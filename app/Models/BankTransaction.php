@@ -16,6 +16,15 @@ class BankTransaction extends Model
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'amount',
+        'related_party_name',
+        'related_party_account',
+        'date',
+        'description',
+        'type',
+    ];
+
     protected static function booted(): void
     {
         static::creating(function ($model) {

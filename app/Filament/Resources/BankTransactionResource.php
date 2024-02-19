@@ -23,12 +23,6 @@ class BankTransactionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('contribution_period_id')
-                    ->required()
-                    ->maxLength(36),
-                Forms\Components\TextInput::make('entry_id')
-                    ->required()
-                    ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
                     ->required()
                     ->numeric(),
@@ -43,9 +37,12 @@ class BankTransactionResource extends Resource
                 Forms\Components\TextInput::make('description')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('type')
+                Forms\Components\Radio::make('type')
                     ->required()
-                    ->maxLength(255),
+                    ->options([
+                        'debit' => 'Debit',
+                        'credit' => 'Credit'
+                    ])
             ]);
     }
 
@@ -53,11 +50,10 @@ class BankTransactionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contribution_period_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('entry_id')
+                Tables\Columns\TextColumn::make('date')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('type')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
@@ -65,18 +61,10 @@ class BankTransactionResource extends Resource
                 Tables\Columns\TextColumn::make('related_party_name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('related_party_account')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('description')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

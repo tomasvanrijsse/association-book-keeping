@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('bank_transactions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('entry_id');
+            $table->string('entry_id')->nullable();
             $table->double('amount');
             $table->string('related_party_name');
             $table->string('related_party_account');
             $table->date('date');
             $table->string('description');
             $table->string('type');
-            $table->foreignUuid('contribution_period_id')->constrained();
+            $table->foreignUuid('contribution_period_id')->nullable()->constrained();
             $table->softDeletes();
             $table->timestamps();
         });
