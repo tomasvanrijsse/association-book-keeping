@@ -15,10 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('entry_id')->nullable();
             $table->double('amount');
-            $table->string('related_party_name');
-            $table->string('related_party_account');
+            $table->string('related_party_name')->nullable();
+            $table->string('related_party_account')->nullable();
             $table->date('date');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('type');
             $table->foreignUuid('contribution_period_id')->nullable()->constrained();
             $table->softDeletes();
