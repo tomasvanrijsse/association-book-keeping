@@ -4,11 +4,11 @@
     </x-slot:title>
 
     <div class="container">
-        @if($this->session->flashdata('error')!='')
+        @if(session('error')!='')
         <div class="row">
             <div class="span12">
                 <div class="alert alert-error" style="margin: 10px 0;">
-                {{ $this->session->flashdata('error') }}
+                {{ session('error') }}
                 </div>
             </div>
         </div>

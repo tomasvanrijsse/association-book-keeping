@@ -23,14 +23,14 @@
                     </form>
                     De laatste import was op: {{ $last_import }}<br/>
                     De laatste transactie is van : {{ $last_transaction }}
-                    @if($this->session->flashdata('home_import_error'))
-                       <div class="alert alert-error"> {{ $this->session->flashdata('home_import_error') }}</div>
+                    @if(session('home_import_error'))
+                       <div class="alert alert-error"> {{ session('home_import_error') }}</div>
                     @endif
-                    @if($this->session->flashdata('home_import_success'))
-                       <div class="alert alert-success"> {{ $this->session->flashdata('home_import_success') }}</div>
+                    @if(session('home_import_success'))
+                       <div class="alert alert-success"> {{ session('home_import_success') }}</div>
                     @endif
-                    @if($this->session->flashdata('home_import_notice'))
-                       <div class="alert"> {{ $this->session->flashdata('home_import_notice') }}</div>
+                    @if(session('home_import_notice'))
+                       <div class="alert"> {{ session('home_import_notice') }}</div>
                     @endif
                 </div>
             </div>

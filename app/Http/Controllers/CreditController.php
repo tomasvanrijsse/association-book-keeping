@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Http\Controllers;
+
+class CreditController extends Controller {
+
+    public function index()
+    {
+        if(getSetting(SETTING_USECREDITGROUPS)){
+            redirect('/credit/groepen');
+        } else {
+            redirect('/credit/bedragen');
+        }
+    }
+
+    public function transacties(){
+        $data = $this->_initData();
+
+        $data['transacties'] = $this->transactie->getOpenCredit();
+
+        set_title('Credit | Transacties verdelen');
+        enqueue_script('/js/libs/jquery-ui-1.10.1.min.js');
+        enqueue_stylesheet('/css/smoothness/jquery-ui-1.10.1.custom.min.css');
+        enqueue_script('/js/libs/jquery.pajinate.js');
+        enqueue_script('/js/credit_transacties.js');
+        enqueue_stylesheet('/css/credit_transacties.css');
+
+        $this->load->view('credit/transacties', $data);
+    }
+
+    public function groepen($groep=null){
+        $data=array();
+        $this->load->model('creditGroup');
+        $data['creditgroups'] = $this->creditgroep->query();
+
+        if(is_null($groep)){
+            $data['transacties'] = $this->transactie->getOpenCredit();
+            $data['groep'] = false;
+            $data['active_groep'] = false;
+        } else {
+            $data['transacties'] = $this->transactie->getGroepTransacties($groep->id);
+            $data['active_groep'] = $groep->id;
+            $data['groep'] = $groep;
+        }
+
+        set_title('Credit | Transacties groeperen');
+        enqueue_script('/js/libs/jquery-ui-1.10.1.min.js');
+        enqueue_stylesheet('/css/smoothness/jquery-ui-1.10.1.custom.min.css');
+        enqueue_script('/js/libs/jquery.pajinate.js');
+        enqueue_stylesheet('/css/credit_groepen.css');
+        enqueue_script('/js/credit_groepen.js');
+
+        $this->load->view('credit/groepen',$data);
+    }
+
+    public function groep_detail($creditgroep_id){
+        $this->load->model('creditGroup');
+        $groep = new creditGroup();
+        $groep = $groep->read($creditgroep_id);
+        //$groep->naam = html_entity_decode(rawurldecode($budget_name));
+        if($groep){
+            set_title('Credit | Groep | '.ucfirst($groep->naam));
+            $this->groepen($groep);
+        } else {
+            $this->session->set_flashdata('error', 'Het budget "'.$groep->naam.'" bestaat niet');
+            redirect('/credit/groepen');
+        }
+    }
+
+    public function addGroep(){
+        $this->load->model('creditGroup');
+        $groep = new creditGroup();
+        $groep->naam = $this->input->post('naam');
+        $groep->status = 1;
+        $groep->jaar = date('Y');
+        if($response = $groep->create()){
+            redirect('/credit/groepen');
+        } else {
+            var_dump($response);
+        }
+    }
+
+    public function transactieGroep(){
+        //transaction koppelen
+        $t = new transaction($this->input->post('tid'));
+        $t->creditgroep_id = $this->input->post('gid');
+        $t->update();
+
+        $this->load->model('creditGroup');
+        $groep = new creditGroup($this->input->post('gid'));
+        echo prijsify($groep->saldo);
+    }
+
+    public function groepen_verdelen(){
+        $data = $this->_initData();
+        $this->load->model('creditGroup');
+        $data['creditgroups'] = $this->creditgroep->query();
+        $data['transacties'] = $this->transactie->getOpenCredit();
+
+        set_title('Credit | Groepen verdelen');
+
+        enqueue_script('/js/credit_groepen_verdelen.js');
+        enqueue_stylesheet('/css/credit_bedragen.css');
+
+        $this->load->view('credit/groepen_verdelen',$data);
+    }
+
+    public function groep_info($id){
+        $result = array('budgetten'=>array(),'boekingen'=>array());
+
+        $budget = new budget();
+        $budgets = $budget->readAll();
+        foreach($budgets as $key => $budget){
+            $result['budgetten'][$budget->id] = round($budget->saldo,2);
+        }
+
+        $this->load->model('boeking');
+        $this->db->select('SUM(`bedrag`) as totaal',FALSE);
+        $this->db->select('budget_id');
+        $this->db->where('creditgroep_id',$id);
+        $this->db->group_by('budget_id');
+        $boekingen = $this->boeking->readAll();
+        foreach($boekingen as $boeking){
+            $result['boekingen'][$boeking->budget_id] = (float)$boeking->totaal;
+
+            if(array_key_exists($boeking->budget_id,$result['budgetten'])){
+                $result['budgetten'][$boeking->budget_id] -= round($boeking->totaal,2);
+            }
+        }
+
+        $this->load->model('creditGroup');
+        $group = new creditGroup($id);
+        $result['saldo'] = $group->credit;
+
+        echo json_encode($result);
+    }
+
+    public function saveGroepBoeking(){
+        $boeking = new boeking();
+        $boeking->budget_id = $this->input->post('budget_id');
+        $boeking->creditgroep_id = $this->input->post('creditgroep_id');
+        if($boeking->readByVars()){
+            $boeking->bedrag = $this->input->post('amount');
+            $boeking->update();
+        } else {
+            $this->load->model('creditGroup');
+            $creditgroep = new creditGroup($this->input->post('creditgroep_id'));
+
+            $boeking->bedrag = $this->input->post('amount');
+            $boeking->datum = date('Y-m-d');
+            $boeking->create();
+        }
+
+        $budget = new budget($this->input->post('budget_id'));
+        echo $budget->saldo;
+    }
+}
