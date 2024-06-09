@@ -1,0 +1,46 @@
+#budgetten li.accept{
+    background-color:#d9edf7;
+}
+
+#budgetten ul.dropable {
+    float:left;
+    margin:5px;
+    background-color:#bbbbbb;
+    width: 26px;
+    height:26px;
+}
+
+#budgetten ul.transacties {
+    display:none;
+    padding:5px;
+    background-color:#bbbbbb;
+    clear:both;
+    margin:5px;
+}
+
+#budgetten span:nth-child(1){
+    width:170px;
+}
+#budgetten span:nth-child(n+2){
+    width:80px;
+}
+
+#transactions span:nth-child(1){
+    width:76px;
+}
+#transactions span:nth-child(2), #transactions span:nth-child(3){
+    width:206px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+#transactions span:nth-child(3){
+    width:140px;
+}
+#transactions span:nth-child(4){
+    width:50px;
+}
+
+#transactions li:nth-child(n+11) {
+    display:none;
+}
