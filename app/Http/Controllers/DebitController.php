@@ -2,45 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Budget;
+use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
+
 class DebitController extends Controller {
 
-    public function index($budget=false)
+    public function index(Budget $budget = null)
     {
-        $data = $this->_initData();
+        $data = [
+            'budgets' => Budget::query()->orderBy('naam')->get()
+        ];
 
-        if($budget==false){
-            $data['transacties'] = $this->transactie->getOpenDebet();
+        if(!$budget){
+            $data['transacties'] = Transaction::query()->openDebit()->get();
             $data['transacties_title'] = 'Ongecategoriseerde transacties';
             $data['active_budget'] = false;
         } else {
-            $transactie = new transaction();
-            $this->db->select('transaction.*');
-            $this->db->join('boeking','boeking.transactie_id = transaction.id AND boeking.bedrag < 0');
-            $this->db->where('boeking.budget_id',$budget->id);
-            $this->db->where('transaction.status',1);
-            $this->db->order_by('transaction.datum DESC');
-            $data['transacties'] = $transactie->readAll();
+            $transacties = Transaction::query()
+                ->whereHas('booking', function (Builder $query) use ($budget) {
+                    $query->where('budget_id', $budget->id)
+                        ->where('bedrag', '<' , 0);
+                })
+                ->orderBy('datum', 'desc')->get();
+
+            $data['transacties'] = $transacties;
             $data['transacties_title'] = $budget->naam.' transacties';
             $data['active_budget'] = $budget->id;
         }
-        enqueue_script('/js/libs/jquery-ui-1.10.1.min.js');
-        enqueue_stylesheet('/css/smoothness/jquery-ui-1.10.1.custom.min.css');
-        enqueue_script('/js/libs/jquery.pajinate.js');
-        enqueue_script('/js/debet.js');
-        enqueue_stylesheet('/css/debet.css');
 
-        $this->load->view('debet/index', $data);
+        return view('debet/index', $data);
     }
 
-    public function detail($budget_name){
-        $budget = new budget();
-        $budget->naam = html_entity_decode(rawurldecode($budget_name));
-        if($budget->readByVars()){
-            set_title('Debet | '.ucfirst($budget->naam));
-            $this->overzicht($budget);
-        } else {
-            $this->session->set_flashdata('error', 'Het budget "'.$budget->naam.'" bestaat niet');
-            redirect('/debet/overzicht');
-        }
-    }
 }

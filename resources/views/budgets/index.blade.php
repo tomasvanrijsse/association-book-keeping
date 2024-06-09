@@ -2,12 +2,6 @@
     <x-slot:title>
         Budgets
     </x-slot:title>
-    <x-slot:style>
-        <link rel="stylesheet" href="/css/public_home.css"/>
-    </x-slot:style>
-    <x-slot:scripts>
-        <script src="/js/public_home.js"></script>
-    </x-slot:scripts>
     <div class="container">
         <div class="row">
             <div class="span7">

@@ -2,6 +2,16 @@
     <x-slot:title>
         Debet transacties
     </x-slot:title>
+    <x-slot:styleSheets>
+        <link rel="stylesheet" href="/css/debet.css"/>
+        <link rel="stylesheet" href="/css/smoothness/jquery-ui-1.10.1.custom.min.css"/>
+    </x-slot:styleSheets>
+    <x-slot:scripts>
+        <script src="/js/libs/jquery-ui-1.10.1.min.js"></script>
+        <script src="/js/libs/jquery.pajinate.js"></script>
+        <script src="/js/debet.js"></script>
+    </x-slot:scripts>
+
 
     <div class="container">
         @if(session('error')!='')
@@ -21,10 +31,10 @@
                     <span style="width:100px">Bedrag</span>
                 </div>
                 <ul id="budgetten" class="table">
-                @foreach($budgetten as $budget)
+                @foreach($budgets as $budget)
                     <li class="dropable {{ ($budget->id==$active_budget?'current':'') }}" data-id="{{ $budget->id }}" data-saldo="{{ round($budget->saldo) }}">
-                        <span><a href="/debet/detail/{{ rawurlencode($budget->naam) }}">{{ $budget->naam }}</a></span>
-                        <span class="clearfix saldo">{{ prijsify($budget->saldo) }}</span>
+                        <span><a href="/debet/{{ ($budget->id) }}">{{ $budget->naam }}</a></span>
+                        <span class="clearfix saldo">{!! prijsify($budget->saldo) !!}</span>
                     </li>
                 @endforeach
                 </ul>
@@ -55,7 +65,7 @@
                 <ul id="transactions" class="dropable table">
                 @foreach($transacties as $transactie)
                     <li data-id="{{ $transactie->id }}" data-bedrag="{{ round($transactie->bedrag) }}">
-                        <span>{{ $transactie->datum_nl }}</span>
+                        <span>{{ $transactie->datum }}</span>
                         <span title="{{ $transactie->description }}">{{ $transactie->description }}</span>
                         <span title="{{ $transactie->van_naam }}">{{ $transactie->van_naam }}</span>
                         <span title="{{ prijsify($transactie->bedrag) }}">&euro; {{ round($transactie->bedrag) }}</span>

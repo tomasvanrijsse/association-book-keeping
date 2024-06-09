@@ -23,5 +23,6 @@ Route::get('/', function () {
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::get('/budgetten', [BudgetController::class,'index'])->name('budgets');
-Route::get('/debet', [DebitController::class,'index'])->name('debet');
+Route::get('/debet/{budget?}', [DebitController::class,'index'])->name('debet');
+
 Route::get('/credit', [CreditController::class,'index'])->name('credit');
