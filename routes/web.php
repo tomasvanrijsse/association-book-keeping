@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\CreditController;
+use App\Http\Controllers\DebitController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +22,6 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
+Route::get('/budgetten', [BudgetController::class,'index'])->name('budgets');
+Route::get('/debet', [DebitController::class,'index'])->name('debet');
+Route::get('/credit', [CreditController::class,'index'])->name('credit');

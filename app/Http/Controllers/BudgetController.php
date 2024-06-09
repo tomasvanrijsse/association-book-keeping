@@ -1,21 +1,15 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
-class budgetten extends CI_Controller {
+namespace App\Http\Controllers;
+
+use App\Models\Budget;
+
+class BudgetController extends Controller {
 
     public function index(){
-        $budget = new budget();
-        $this->db->order_by('naam');
-        $budgetten = $budget->readAll();
-
-        $data = array(
-            'budgetten' => $budgetten
-        );
-
-        set_title('Home');
-        enqueue_stylesheet('/css/public_home.css');
-        enqueue_script('/js/public_home.js');
-
-        $this->load->view('budgets/index',$data);
+        return view('budgets/index', [
+            'budgetten' => Budget::query()->orderBy('naam')->get()
+        ]);
     }
 
     public function addBudget(){

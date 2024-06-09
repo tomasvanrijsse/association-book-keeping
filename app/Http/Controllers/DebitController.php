@@ -4,19 +4,8 @@ namespace App\Http\Controllers;
 
 class DebitController extends Controller {
 
-    public function __construct()
+    public function index($budget=false)
     {
-        parent::__construct();
-    }
-
-    public function index(){
-        redirect('/debet/overzicht');
-    }
-
-    public function overzicht($budget=false)
-    {
-        if(!$budget) set_title('Debet');
-
         $data = $this->_initData();
 
         if($budget==false){

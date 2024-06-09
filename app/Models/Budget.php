@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property $id
@@ -10,14 +11,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Budget extends Model {
 
-    function saldo()
-    {
-        $sql = 'SELECT SUM(bedrag) as saldo FROM boeking WHERE budget_id = ' . $this->id;
-        $query = $this->db->query($sql);
-        $row = $query->row();
+    use SoftDeletes;
 
-        $this->_saldo = $row->saldo;
-        return round($row->saldo, 2);
+    protected $table = 'budget';
+
+    function getSaldoAttribute()
+    {
+        $amount = Booking::query()->where('budget_id', $this->id)->sum('bedrag');
+        return round($amount, 2);
     }
 
     public function create(){
