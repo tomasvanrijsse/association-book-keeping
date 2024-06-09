@@ -1,7 +1,16 @@
 <x-layout>
     <x-slot:title>
-        Transacties verdelen
+        Credit | Transacties verdelen
     </x-slot:title>
+    <x-slot:styleSheets>
+        <link rel="stylesheet" href="/css/credit_transacties.css"/>
+        <link rel="stylesheet" href="/css/smoothness/jquery-ui-1.10.1.custom.min.css"/>
+    </x-slot:styleSheets>
+    <x-slot:scripts>
+        <script src="/js/libs/jquery-ui-1.10.1.min.js"></script>
+        <script src="/js/libs/jquery.pajinate.js"></script>
+        <script src="/js/credit_transacties.js"></script>
+    </x-slot:scripts>
 
     <div class="container">
         <div class="row">
@@ -10,13 +19,9 @@
             </div>
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
-                    @if(getSetting(SETTING_USECREDITGROUPS))
                     <li><a href="/credit/groepen">Groeperen</a></li>
                     <li><a href="/credit/groepen_verdelen">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
-                    @else
-                    <li><a href="/credit/bedragen">Bedragen</a></li>
-                    @endif
                     <li class="active"><a href="/credit/transacties">Transacties</a></li>
                 </ul>
             </div>

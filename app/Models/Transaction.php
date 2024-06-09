@@ -41,16 +41,6 @@ class Transaction extends Model {
 
     /** CUSTOM transaction FUNCTIONS **/
 
-    public function getOpenCredit(){
-        $this->db->select('transaction.*');
-        $this->db->order_by('transaction.datum DESC');
-        $this->db->where('type','credit');
-        $this->db->join('boeking','boeking.transactie_id = transaction.id','left');
-        $this->db->where('boeking.id IS NULL');
-        $this->db->where('transaction.creditgroep_id IS NULL');
-        $this->db->where('status >=',1);
-        return $this->readAll();
-    }
 
     public function deactivate(){
         //transaction uit + debit uitschakelen
@@ -60,12 +50,6 @@ class Transaction extends Model {
         //credit boeking verwijderen
         $this->db->where('transactie_id',$this->id);
         $this->db->delete('boeking');
-    }
-
-    public function getGroepTransacties($groep_id){
-        $this->db->order_by('van_naam');
-        $this->db->where('creditgroep_id',$groep_id);
-        return $this->transactie->readAll();
     }
 
     /* aangepaste exists/countByVars voor de import, zodat niet alle Vars meegenomen worden. */

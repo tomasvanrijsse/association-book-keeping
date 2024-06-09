@@ -28,4 +28,6 @@ Route::delete('/budgets/{budget}', [BudgetController::class,'delete']);
 
 Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debet');
 
-Route::get('/credit', [CreditController::class,'index'])->name('credit');
+Route::get('/credit/transacties', [CreditController::class,'transacties']);
+Route::get('/credit/groepen_verdelen', [CreditController::class,'groepen_verdelen']);
+Route::get('/credit/{creditGroup?}', [CreditController::class,'index'])->name('credit');

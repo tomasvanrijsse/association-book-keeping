@@ -2,55 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CreditGroup;
+use App\Models\Transaction;
+
 class CreditController extends Controller {
 
-    public function index()
-    {
-        if(getSetting(SETTING_USECREDITGROUPS)){
-            redirect('/credit/groepen');
-        } else {
-            redirect('/credit/bedragen');
-        }
-    }
-
     public function transacties(){
-        $data = $this->_initData();
+        $transactions = Transaction::query()
+            ->where('type', 'credit')
+            ->whereNull('creditgroep_id')
+            ->doesntHave('booking')
+            ->orderBy('datum','desc')
+            ->get();
 
-        $data['transacties'] = $this->transactie->getOpenCredit();
-
-        set_title('Credit | Transacties verdelen');
-        enqueue_script('/js/libs/jquery-ui-1.10.1.min.js');
-        enqueue_stylesheet('/css/smoothness/jquery-ui-1.10.1.custom.min.css');
-        enqueue_script('/js/libs/jquery.pajinate.js');
-        enqueue_script('/js/credit_transacties.js');
-        enqueue_stylesheet('/css/credit_transacties.css');
-
-        $this->load->view('credit/transacties', $data);
+        return view('credit/transacties', [
+            'transactions' => $transactions
+        ]);
     }
 
-    public function groepen($groep=null){
-        $data=array();
-        $this->load->model('creditGroup');
-        $data['creditgroups'] = $this->creditgroep->query();
+    public function index(CreditGroup $creditGroup=null){
 
-        if(is_null($groep)){
-            $data['transacties'] = $this->transactie->getOpenCredit();
-            $data['groep'] = false;
-            $data['active_groep'] = false;
+        if(is_null($creditGroup)){
+            $transactions = Transaction::query()
+                ->where('type', 'credit')
+                ->whereNull('creditgroep_id')
+                ->doesntHave('booking')
+                ->orderBy('datum','desc')
+                ->get();
         } else {
-            $data['transacties'] = $this->transactie->getGroepTransacties($groep->id);
-            $data['active_groep'] = $groep->id;
-            $data['groep'] = $groep;
+            $transactions = Transaction::query()
+                ->where('creditgroep_id',$creditGroup->id)
+                ->orderBy('van_naam')
+                ->get();
         }
 
-        set_title('Credit | Transacties groeperen');
-        enqueue_script('/js/libs/jquery-ui-1.10.1.min.js');
-        enqueue_stylesheet('/css/smoothness/jquery-ui-1.10.1.custom.min.css');
-        enqueue_script('/js/libs/jquery.pajinate.js');
-        enqueue_stylesheet('/css/credit_groepen.css');
-        enqueue_script('/js/credit_groepen.js');
-
-        $this->load->view('credit/groepen',$data);
+        return view('credit/groepen',[
+            'transactions' => $transactions,
+            'activeGroup' => $creditGroup,
+            'creditGroups' => CreditGroup::query()
+                ->with('transactions','bookings')
+                ->orderBy('id','desc')
+                ->get(),
+        ]);
     }
 
     public function groep_detail($creditgroep_id){
@@ -63,7 +56,7 @@ class CreditController extends Controller {
             $this->groepen($groep);
         } else {
             $this->session->set_flashdata('error', 'Het budget "'.$groep->naam.'" bestaat niet');
-            redirect('/credit/groepen');
+            return redirect('/credit/groepen');
         }
     }
 
@@ -74,7 +67,7 @@ class CreditController extends Controller {
         $groep->status = 1;
         $groep->jaar = date('Y');
         if($response = $groep->create()){
-            redirect('/credit/groepen');
+            return redirect('/credit/groepen');
         } else {
             var_dump($response);
         }
@@ -97,12 +90,7 @@ class CreditController extends Controller {
         $data['creditgroups'] = $this->creditgroep->query();
         $data['transacties'] = $this->transactie->getOpenCredit();
 
-        set_title('Credit | Groepen verdelen');
-
-        enqueue_script('/js/credit_groepen_verdelen.js');
-        enqueue_stylesheet('/css/credit_bedragen.css');
-
-        $this->load->view('credit/groepen_verdelen',$data);
+        return view('credit/groepen_verdelen',$data);
     }
 
     public function groep_info($id){

@@ -1,7 +1,16 @@
 <x-layout>
     <x-slot:title>
-        Groepen
+        Credit | Transacties groeperen
     </x-slot:title>
+    <x-slot:styleSheets>
+        <link rel="stylesheet" href="/css/credit_groepen.css"/>
+        <link rel="stylesheet" href="/css/smoothness/jquery-ui-1.10.1.custom.min.css"/>
+    </x-slot:styleSheets>
+    <x-slot:scripts>
+        <script src="/js/libs/jquery-ui-1.10.1.min.js"></script>
+        <script src="/js/libs/jquery.pajinate.js"></script>
+        <script src="/js/credit_groepen.js"></script>
+    </x-slot:scripts>
 
     <div class="container">
         @if(session('error')!='')
@@ -15,7 +24,7 @@
         @endif
         <div class="row">
             <div class="span6">
-                <h3>{{ $groep ? $groep->naam : 'Groepen' }}</h3>
+                <h3>{{ $activeGroup ? $activeGroup->naam : 'Groepen' }}</h3>
             </div>
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
@@ -34,16 +43,16 @@
                     <span style="width:80px">Rest</span>
                 </div>
                 <ul id="budgetten" class="table">
-                @foreach($creditgroups as $creditgroup)
-                    <li class="dropable {{ ($creditgroup->id==$active_groep?'current':'')}}"
-                        data-saldo="{{ round ($creditgroup->saldo) }}" data-id="{{ $creditgroup->id }}">
-                        <span><a href="/credit/groep_detail/{{ $creditgroup->id }}">{{ $creditgroup->naam }}</a></span>
-                        <span>{{ prijsify($creditgroup->credit) }}</span>
+                @foreach($creditGroups as $creditGroup)
+                    <li class="dropable {{ ($creditGroup->id==$activeGroup?->id?'current':'')}}"
+                        data-saldo="{{ round ($creditGroup->saldo) }}" data-id="{{ $creditGroup->id }}">
+                        <span><a href="/credit/{{ $creditGroup->id }}">{{ $creditGroup->naam }}</a></span>
+                        <span>{!! prijsify($creditGroup->credit) !!}</span>
                         <span class="clearfix saldo">
-                        @if(round($creditgroup->saldo)==0 && $creditgroup->credit>0)
+                        @if(round($creditGroup->saldo)==0 && $creditGroup->credit>0)
                             &#10003;&nbsp;
                         @else
-                            {{ prijsify($creditgroup->saldo) }}
+                            {!! prijsify($creditGroup->saldo) !!}
                         @endif
                         </span>
                     </li>
@@ -74,12 +83,12 @@
                     <span style="width:50px">Bedrag</span>
                 </div>
                 <ul id="transactions" class="dropable table">
-                @foreach($transacties as $transactie)
-                    <li data-id="{{ $transactie->id }}" data-bedrag="{{ round($transactie->bedrag) }}">
-                        <span>{{ $transactie->datum_nl }}</span>
-                        <span title="{{ $transactie->description }}">{{ $transactie->description }}</span>
-                        <span title="{{ $transactie->van_naam }}">{{ $transactie->van_naam }}</span>
-                        <span>&euro; {{ round($transactie->bedrag) }}</span>
+                @foreach($transactions as $transaction)
+                    <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->bedrag) }}">
+                        <span>{{ $transaction->datum }}</span>
+                        <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
+                        <span title="{{ $transaction->van_naam }}">{{ $transaction->van_naam }}</span>
+                        <span>&euro; {{ round($transaction->bedrag) }}</span>
                     </li>
                 @endforeach
                 </ul>

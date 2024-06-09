@@ -1,7 +1,14 @@
 <x-layout>
     <x-slot:title>
-        Groepen Verdelen
+        Credit | Groepen verdelen
     </x-slot:title>
+
+    <x-slot:styleSheets>
+        <link rel="stylesheet" href="/css/credit_bedragen.css"/>
+    </x-slot:styleSheets>
+    <x-slot:scripts>
+        <script src="/js/credit_groepen_verdelen.js"></script>
+    </x-slot:scripts>
 
     <div class="container">
         <div class="row">

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @property $id
@@ -14,26 +18,35 @@ class CreditGroup extends Model {
 
     protected $table = 'creditgroep';
 
-    private $sql = 'SELECT creditGroup.*, credit.bedrag as credit, debet.bedrag as debet, IFNULL(credit.bedrag,0) - IFNULL(debet.bedrag,0) as saldo
-	FROM creditGroup
-    LEFT JOIN (SELECT ROUND(SUM(bedrag),2) as bedrag,creditgroep_id FROM transaction GROUP BY creditgroep_id) as credit
-    ON credit.creditgroep_id = creditGroup.id
-    LEFT JOIN (SELECT ROUND(SUM(bedrag),2) as bedrag,creditgroep_id FROM boeking GROUP BY creditgroep_id) as debet
-    ON debet.creditgroep_id = creditGroup.id
-    %s
-    ORDER BY id DESC';
-    /** CUSTOM creditgroup FUNCTIONS **/
-
-    function read($id = null){
-        $query = $this->db->query(sprintf($this->sql,'where creditGroup.id = '.$id));
-        $result = $query->result();
-        return $this->fillObject($result[0]);
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class,  'creditgroep_id', 'id');
     }
 
-    function query(){
-        $query = $this->db->query(sprintf($this->sql,''));
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class,  'creditgroep_id', 'id');
+    }
 
-        return $this->fillObjects($query);
+    public function credit(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->transactions->sum('bedrag'),
+        );
+    }
+
+    public function debit(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->bookings->sum('bedrag'),
+        );
+    }
+
+    public function saldo(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->credit - $this->debet,
+        );
     }
 
 }
