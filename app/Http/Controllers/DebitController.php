@@ -10,28 +10,25 @@ class DebitController extends Controller {
 
     public function index(Budget $budget = null)
     {
-        $data = [
-            'budgets' => Budget::query()->orderBy('naam')->get()
-        ];
-
         if(!$budget){
-            $data['transacties'] = Transaction::query()->openDebit()->get();
-            $data['transacties_title'] = 'Ongecategoriseerde transacties';
-            $data['active_budget'] = false;
+            $transactions = Transaction::query()
+                ->where('type', 'debet')
+                ->doesntHave('booking')
+                ->orderBy('datum','desc')
+                ->get();
         } else {
-            $transacties = Transaction::query()
-                ->whereHas('booking', function (Builder $query) use ($budget) {
-                    $query->where('budget_id', $budget->id)
-                        ->where('bedrag', '<' , 0);
-                })
-                ->orderBy('datum', 'desc')->get();
-
-            $data['transacties'] = $transacties;
-            $data['transacties_title'] = $budget->naam.' transacties';
-            $data['active_budget'] = $budget->id;
+            $transactions = Transaction::query()
+                ->where('type', 'debet')
+                ->onBudget($budget)
+                ->orderBy('datum', 'desc')
+                ->get();
         }
 
-        return view('debet/index', $data);
+        return view('debet/index', [
+            'budgets' => Budget::query()->orderBy('naam')->get(),
+            'activeBudget' => $budget,
+            'transactions' => $transactions,
+        ]);
     }
 
 }

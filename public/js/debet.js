@@ -36,4 +36,17 @@ $(document).ready(function(){
         item_container_id:'#transactions',
         abort_on_small_lists: true
     });
-}); 
+
+    $('#budgetDelete').on('click', function(){
+       let confirmed = confirm('Weet je zeker dat je dit budget wil verwijderen?');
+
+       if(confirmed){
+           $.ajax({
+               url: '/budgets/' + $(this).data('budget_id'),
+               type: 'delete',
+           }).done(function() {
+               window.location.replace("/debit");
+           })
+       }
+    });
+});

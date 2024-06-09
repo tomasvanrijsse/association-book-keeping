@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,6 +24,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Transaction extends Model {
 
+    use SoftDeletes;
+
     protected $table = 'transactie';
 
     public function booking(): HasMany
@@ -30,14 +33,13 @@ class Transaction extends Model {
         return $this->hasMany(Booking::class, 'transactie_id');
     }
 
-    /** CUSTOM transaction FUNCTIONS **/
-    public function scopeOpenDebit(Builder $query){
-
-        return $query
-            ->orderBy('datum','DESC')
-            ->where('type','debet')
-            ->where(DB::raw('id NOT IN (SELECT transactie_id FROM boeking WHERE transactie_id IS NOT NULL AND bedrag < 0)'));
+    public function scopeOnBudget(Builder $query, Budget $budget){
+        $query->whereHas('booking', function (Builder $query) use ($budget) {
+            $query->where('budget_id', $budget->id);
+        });
     }
+
+    /** CUSTOM transaction FUNCTIONS **/
 
     public function getOpenCredit(){
         $this->db->select('transaction.*');

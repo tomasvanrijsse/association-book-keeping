@@ -4,6 +4,7 @@
     <title>{{ $title ?? 'Association Book Keeping' }}</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/datepicker.css" />
@@ -18,9 +19,9 @@
             <ul class="nav">
                 <?php $pages = [
                     array('name'=>'Home','url'=>'home', 'icon'=> 'icon-homeController'),
-                    array('name'=>'Debet','url'=>'debet', 'icon'=> 'icon-minus-sign'),
+                    array('name'=>'Debet','url'=>'debit', 'icon'=> 'icon-minus-sign'),
                     array('name'=>'Credit','url'=>'credit', 'icon'=> 'icon-plus-sign'),
-                    array('name'=>'Budgetten','url'=>'budgetten', 'icon'=> 'icon-list'),
+                    array('name'=>'Budgetten','url'=>'budgets', 'icon'=> 'icon-list'),
                 ];?>
                 @foreach($pages as $page)
                 <li class="{{-- ($this->uri->segment(1)==$page['url']?'active':'') --}}">

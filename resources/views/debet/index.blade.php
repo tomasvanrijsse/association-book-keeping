@@ -32,15 +32,17 @@
                 </div>
                 <ul id="budgetten" class="table">
                 @foreach($budgets as $budget)
-                    <li class="dropable {{ ($budget->id==$active_budget?'current':'') }}" data-id="{{ $budget->id }}" data-saldo="{{ round($budget->saldo) }}">
-                        <span><a href="/debet/{{ ($budget->id) }}">{{ $budget->naam }}</a></span>
+                    <li class="dropable {{ ($budget->id==$activeBudget?->id?'current':'') }}" data-id="{{ $budget->id }}" data-saldo="{{ round($budget->saldo) }}">
+                        <span><a href="/debit/{{ ($budget->id) }}">{{ $budget->naam }}</a></span>
                         <span class="clearfix saldo">{!! prijsify($budget->saldo) !!}</span>
                     </li>
                 @endforeach
                 </ul>
                 <hr>
                 <button class="btn btn-form">Nieuw budget toevoegen</button>
-                <form action="/debet/addBudget" id="addBudget" method="POST">
+                <form action="/budgets" id="addBudget" method="POST">
+                    @csrf
+                    <input type="hidden" name="redirectUrl" value="/debit">
                     <div class="control-group">
                         <label class="control-label" for="inputNaam">Naam</label>
                         <div class="controls">
@@ -55,7 +57,15 @@
                 </form>
             </div>
             <div class="span7">
-                <h3>{{ $transacties_title }}</h3>
+                <h3>@if($activeBudget)
+                        {{ $activeBudget->naam }} transacties
+                        <button id="budgetDelete" data-budget_id="{{$activeBudget->id}}">
+                            <i class="icon-trash"></i>
+                        </button>
+                    @else
+                        Ongecategoriseerde transacties
+                    @endif
+                </h3>
                 <div class="table thead">
                     <span style="width:76px">Datum</span>
                     <span style="width:206px">Beschrijving</span>
@@ -63,12 +73,12 @@
                     <span style="width:50px">Bedrag</span>
                 </div>
                 <ul id="transactions" class="dropable table">
-                @foreach($transacties as $transactie)
-                    <li data-id="{{ $transactie->id }}" data-bedrag="{{ round($transactie->bedrag) }}">
-                        <span>{{ $transactie->datum }}</span>
-                        <span title="{{ $transactie->description }}">{{ $transactie->description }}</span>
-                        <span title="{{ $transactie->van_naam }}">{{ $transactie->van_naam }}</span>
-                        <span title="{{ prijsify($transactie->bedrag) }}">&euro; {{ round($transactie->bedrag) }}</span>
+                @foreach($transactions as $transaction)
+                    <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->bedrag) }}">
+                        <span>{{ $transaction->datum }}</span>
+                        <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
+                        <span title="{{ $transaction->van_naam }}">{{ $transaction->van_naam }}</span>
+                        <span title="{{ prijsify($transaction->bedrag) }}">&euro; {{ round($transaction->bedrag) }}</span>
                     </li>
                 @endforeach
                 </ul>

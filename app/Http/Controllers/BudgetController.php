@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Budget;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class BudgetController extends Controller {
 
@@ -12,24 +14,18 @@ class BudgetController extends Controller {
         ]);
     }
 
-    public function addBudget(){
+    public function create(Request $request){
         $budget = new budget();
-        $budget->naam = $this->input->post('naam');
-        $budget->verborgen = 0;
-        if($budget->create()){
-            $this->index();
-        } else {
-            $this->index();
-        }
+        $budget->naam = $request->input('naam');
+        $budget->save();
+
+        return redirect($request->input('redirectUrl'));
     }
 
-    protected function _initData(){
-        $data = array();
-        $budget = new budget();
-        $budget->verborgen = 0;
-        $this->db->order_by('naam');
-        $data['budgetten'] = $budget->readAllByVars();
-        return $data;
+    public function delete(Budget $budget)
+    {
+        $budget->delete();
+        return response()->noContent();
     }
 
     public function transactieBudget(){
