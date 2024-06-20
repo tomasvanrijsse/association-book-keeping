@@ -45,7 +45,7 @@ class CreditGroup extends Model {
     public function saldo(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->credit - $this->debet,
+            get: fn () => $this->credit - $this->debit,
         );
     }
 

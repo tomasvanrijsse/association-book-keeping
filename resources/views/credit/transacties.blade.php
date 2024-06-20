@@ -19,7 +19,7 @@
             </div>
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
-                    <li><a href="/credit/groepen">Groeperen</a></li>
+                    <li><a href="/credit">Groeperen</a></li>
                     <li><a href="/credit/groepen_verdelen">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
                     <li class="active"><a href="/credit/transacties">Transacties</a></li>

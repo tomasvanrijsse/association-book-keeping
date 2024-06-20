@@ -31,3 +31,6 @@ Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debet');
 Route::get('/credit/transacties', [CreditController::class,'transacties']);
 Route::get('/credit/groepen_verdelen', [CreditController::class,'groepen_verdelen']);
 Route::get('/credit/{creditGroup?}', [CreditController::class,'index'])->name('credit');
+Route::get('/credit/{creditGroup}/bookings', [CreditController::class,'bookings']);
+Route::post('/credit', [CreditController::class,'createCreditGroup']);
+Route::post('/credit/saveBooking', [CreditController::class,'saveBooking']);

@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
+use App\Models\Budget;
 use App\Models\CreditGroup;
 use App\Models\Transaction;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CreditController extends Controller {
 
@@ -46,31 +51,14 @@ class CreditController extends Controller {
         ]);
     }
 
-    public function groep_detail($creditgroep_id){
-        $this->load->model('creditGroup');
-        $groep = new creditGroup();
-        $groep = $groep->read($creditgroep_id);
-        //$groep->naam = html_entity_decode(rawurldecode($budget_name));
-        if($groep){
-            set_title('Credit | Groep | '.ucfirst($groep->naam));
-            $this->groepen($groep);
-        } else {
-            $this->session->set_flashdata('error', 'Het budget "'.$groep->naam.'" bestaat niet');
-            return redirect('/credit/groepen');
-        }
-    }
+    public function createCreditGroup(Request $request): RedirectResponse
+    {
+        $creditGroup = new creditGroup();
+        $creditGroup->naam = $request->input('naam');
+        $creditGroup->jaar = date('Y');
+        $creditGroup->save();
 
-    public function addGroep(){
-        $this->load->model('creditGroup');
-        $groep = new creditGroup();
-        $groep->naam = $this->input->post('naam');
-        $groep->status = 1;
-        $groep->jaar = date('Y');
-        if($response = $groep->create()){
-            return redirect('/credit/groepen');
-        } else {
-            var_dump($response);
-        }
+        return redirect('/credit');
     }
 
     public function transactieGroep(){
@@ -85,29 +73,26 @@ class CreditController extends Controller {
     }
 
     public function groepen_verdelen(){
-        $data = $this->_initData();
-        $this->load->model('creditGroup');
-        $data['creditgroups'] = $this->creditgroep->query();
-        $data['transacties'] = $this->transactie->getOpenCredit();
+        $data['creditgroups'] = CreditGroup::query()->orderBy('id','desc')->get();
+        $data['budgets'] = Budget::orderBy('naam','asc')->get();
 
         return view('credit/groepen_verdelen',$data);
     }
 
-    public function groep_info($id){
+    public function bookings(CreditGroup $creditGroup){
         $result = array('budgetten'=>array(),'boekingen'=>array());
 
-        $budget = new budget();
-        $budgets = $budget->readAll();
-        foreach($budgets as $key => $budget){
+        $budgets = Budget::all();
+        foreach($budgets as $budget){
             $result['budgetten'][$budget->id] = round($budget->saldo,2);
         }
 
-        $this->load->model('boeking');
-        $this->db->select('SUM(`bedrag`) as totaal',FALSE);
-        $this->db->select('budget_id');
-        $this->db->where('creditgroep_id',$id);
-        $this->db->group_by('budget_id');
-        $boekingen = $this->boeking->readAll();
+        $boekingen = Booking::query()
+            ->selectRaw('SUM(bedrag) as totaal, budget_id')
+            ->where('creditgroep_id', $creditGroup->id)
+            ->groupBy('budget_id')
+            ->get();
+
         foreach($boekingen as $boeking){
             $result['boekingen'][$boeking->budget_id] = (float)$boeking->totaal;
 
@@ -116,30 +101,23 @@ class CreditController extends Controller {
             }
         }
 
-        $this->load->model('creditGroup');
-        $group = new creditGroup($id);
-        $result['saldo'] = $group->credit;
+        $result['saldo'] = $creditGroup->credit;
 
         echo json_encode($result);
     }
 
-    public function saveGroepBoeking(){
-        $boeking = new boeking();
-        $boeking->budget_id = $this->input->post('budget_id');
-        $boeking->creditgroep_id = $this->input->post('creditgroep_id');
-        if($boeking->readByVars()){
-            $boeking->bedrag = $this->input->post('amount');
-            $boeking->update();
-        } else {
-            $this->load->model('creditGroup');
-            $creditgroep = new creditGroup($this->input->post('creditgroep_id'));
+    public function saveBooking(Request $request){
+        Booking::updateOrCreate(
+            [
+                'budget_id' =>  $request->input('budget_id'),
+                'creditgroep_id' =>  $request->input('creditgroep_id')
+            ],
+            [
+                'bedrag' => $request->input('amount')
+            ]
+        );
 
-            $boeking->bedrag = $this->input->post('amount');
-            $boeking->datum = date('Y-m-d');
-            $boeking->create();
-        }
-
-        $budget = new budget($this->input->post('budget_id'));
+        $budget = Budget::find($request->input('budget_id'));
         echo $budget->saldo;
     }
 }

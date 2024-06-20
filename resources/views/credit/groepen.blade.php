@@ -28,7 +28,7 @@
             </div>
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
-                    <li class="active"><a href="/credit/groepen">Groeperen</a></li>
+                    <li class="active"><a href="/credit">Groeperen</a></li>
                     <li><a href="/credit/groepen_verdelen">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
                     <li><a href="/credit/transacties">Transacties</a></li>
@@ -61,7 +61,8 @@
                 <div class="page_navigation pagination"></div>
                 <hr>
                 <button class="btn btn-form">Nieuwe groep toevoegen</button>
-                <form action="/credit/addGroep" id="addGroep" method="POST">
+                <form action="/credit" id="addGroep" method="POST">
+                    @csrf
                     <div class="control-group">
                         <label class="control-label" for="inputNaam">Naam</label>
                         <div class="controls">
