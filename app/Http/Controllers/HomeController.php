@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CounterSuggestion;
 use App\Models\Setting;
-use App\Models\Transaction;
+use App\Models\BankTransaction;
 
 class HomeController extends Controller {
 
@@ -12,7 +12,7 @@ class HomeController extends Controller {
         $data = array(
             'aantalCounter' => CounterSuggestion::query()->where('status', 1)->count(),
             'last_import' => Setting::query()->where('key','LAST_IMPORT')->value('value'),
-            'last_transaction' => Transaction::query()->max('datum')
+            'last_transaction' => BankTransaction::query()->max('datum')
         );
 
         return view('home/index', $data);

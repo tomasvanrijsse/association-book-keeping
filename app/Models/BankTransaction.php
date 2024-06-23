@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  * @property $creditgroep_id
  * @property $status
  */
-class Transaction extends Model {
+class BankTransaction extends Model {
 
     use SoftDeletes;
 
@@ -40,7 +40,7 @@ class Transaction extends Model {
 
     public function booking(): HasMany
     {
-        return $this->hasMany(Booking::class, 'transactie_id');
+        return $this->hasMany(BudgetMutation::class, 'transactie_id');
     }
 
     public function scopeOnBudget(Builder $query, Budget $budget){

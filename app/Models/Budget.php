@@ -27,7 +27,7 @@ class Budget extends Model {
 
     function getSaldoAttribute()
     {
-        $amount = Booking::query()->where('budget_id', $this->id)->sum('bedrag');
+        $amount = BudgetMutation::query()->where('budget_id', $this->id)->sum('bedrag');
         return round($amount, 2);
     }
 

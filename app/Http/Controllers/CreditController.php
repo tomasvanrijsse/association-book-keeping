@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CreditGroup;
-use App\Models\Transaction;
+use App\Models\ContributionPeriod;
+use App\Models\BankTransaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class CreditController extends Controller {
 
-    public function index(CreditGroup $creditGroup=null){
+    public function index(ContributionPeriod $creditGroup=null){
 
         if(is_null($creditGroup)){
-            $transactions = Transaction::query()
+            $transactions = BankTransaction::query()
                 ->where('type', 'credit')
                 ->whereNull('creditgroep_id')
                 ->doesntHave('booking')
                 ->get();
         } else {
-            $transactions = Transaction::query()
+            $transactions = BankTransaction::query()
                 ->where('creditgroep_id',$creditGroup->id)
                 ->get();
         }
@@ -26,7 +26,7 @@ class CreditController extends Controller {
         return view('credit/groepen',[
             'transactions' => $transactions,
             'activeGroup' => $creditGroup,
-            'creditGroups' => CreditGroup::query()
+            'creditGroups' => ContributionPeriod::query()
                 ->with('transactions','bookings')
                 ->orderBy('id','desc')
                 ->get(),
@@ -35,7 +35,7 @@ class CreditController extends Controller {
 
     public function createCreditGroup(Request $request): RedirectResponse
     {
-        $creditGroup = new CreditGroup();
+        $creditGroup = new ContributionPeriod();
         $creditGroup->naam = $request->input('naam');
         $creditGroup->jaar = date('Y');
         $creditGroup->save();
@@ -45,9 +45,9 @@ class CreditController extends Controller {
 
 
     public function assignTransactionToCreditGroup(Request $request){
-        $group = CreditGroup::find($request->input('creditGroup_id'));
+        $group = ContributionPeriod::find($request->input('creditGroup_id'));
 
-        $transaction = Transaction::query()->find($request->input('transaction_id'));
+        $transaction = BankTransaction::query()->find($request->input('transaction_id'));
         $transaction->creditgroep_id = $group->id;
         $transaction->save();
 

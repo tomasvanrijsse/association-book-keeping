@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
+use App\Models\BudgetMutation;
 use App\Models\Budget;
-use App\Models\Transaction;
+use App\Models\BankTransaction;
 use Illuminate\Http\Request;
 
 class CreditTransactions extends Controller
 {
 
     public function index(){
-        $transactions = Transaction::query()
+        $transactions = BankTransaction::query()
             ->where('type', 'credit')
             ->whereNull('creditgroep_id')
             ->doesntHave('booking')
@@ -24,9 +24,9 @@ class CreditTransactions extends Controller
     }
 
     public function saveBooking(Request $request){
-        $transaction = Transaction::query()->find($request->input('transaction_id'));
+        $transaction = BankTransaction::query()->find($request->input('transaction_id'));
 
-        Booking::updateOrCreate(
+        BudgetMutation::updateOrCreate(
             [
                 'transactie_id' =>  $transaction->id,
             ],

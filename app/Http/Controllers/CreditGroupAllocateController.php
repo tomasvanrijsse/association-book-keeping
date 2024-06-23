@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
+use App\Models\BudgetMutation;
 use App\Models\Budget;
-use App\Models\CreditGroup;
+use App\Models\ContributionPeriod;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -13,14 +13,14 @@ class CreditGroupAllocateController extends Controller
 
     public function index(){
         $data = [
-            'creditgroups' => CreditGroup::query()->orderBy('id','desc')->get(),
+            'creditgroups' => ContributionPeriod::query()->orderBy('id','desc')->get(),
             'budgets' => Budget::all(),
         ];
 
         return view('credit/groepen_verdelen',$data);
     }
 
-    public function bookings(CreditGroup $creditGroup){
+    public function bookings(ContributionPeriod $creditGroup){
         $result = array('budgetten'=>array(),'boekingen'=>array());
 
         $budgets = Budget::all();
@@ -28,7 +28,7 @@ class CreditGroupAllocateController extends Controller
             $result['budgetten'][$budget->id] = round($budget->saldo,2);
         }
 
-        $boekingen = Booking::query()
+        $boekingen = BudgetMutation::query()
             ->selectRaw('SUM(bedrag) as totaal, budget_id')
             ->where('creditgroep_id', $creditGroup->id)
             ->groupBy('budget_id')
@@ -49,7 +49,7 @@ class CreditGroupAllocateController extends Controller
     }
 
     public function saveBooking(Request $request){
-        Booking::updateOrCreate(
+        BudgetMutation::updateOrCreate(
             [
                 'budget_id' =>  $request->input('budget_id'),
                 'creditgroep_id' =>  $request->input('creditgroep_id')

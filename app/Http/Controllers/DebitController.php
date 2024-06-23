@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
+use App\Models\BudgetMutation;
 use App\Models\Budget;
-use App\Models\Transaction;
+use App\Models\BankTransaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -13,12 +13,12 @@ class DebitController extends Controller {
     public function index(Budget $budget = null)
     {
         if(!$budget){
-            $transactions = Transaction::query()
+            $transactions = BankTransaction::query()
                 ->where('type', 'debet')
                 ->doesntHave('booking')
                 ->get();
         } else {
-            $transactions = Transaction::query()
+            $transactions = BankTransaction::query()
                 ->where('type', 'debet')
                 ->onBudget($budget)
                 ->get();
@@ -31,9 +31,9 @@ class DebitController extends Controller {
         ]);
     }
     public function saveBooking(Request $request){
-        $transaction = Transaction::query()->find($request->input('transaction_id'));
+        $transaction = BankTransaction::query()->find($request->input('transaction_id'));
 
-        Booking::updateOrCreate(
+        BudgetMutation::updateOrCreate(
             [
                 'transactie_id' =>  $transaction->id,
             ],

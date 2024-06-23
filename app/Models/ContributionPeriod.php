@@ -14,18 +14,18 @@ use Illuminate\Support\Facades\DB;
  * @property $status
  * @property $jaar
  */
-class CreditGroup extends Model {
+class ContributionPeriod extends Model {
 
     protected $table = 'creditgroep';
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(Transaction::class,  'creditgroep_id', 'id');
+        return $this->hasMany(BankTransaction::class,  'creditgroep_id', 'id');
     }
 
     public function bookings(): HasMany
     {
-        return $this->hasMany(Booking::class,  'creditgroep_id', 'id');
+        return $this->hasMany(BudgetMutation::class,  'creditgroep_id', 'id');
     }
 
     public function credit(): Attribute

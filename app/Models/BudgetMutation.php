@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property $transactie_id
  * @property $creditgroep_id
  */
-class Booking extends Model {
+class BudgetMutation extends Model {
 
     protected $table = 'boeking';
 
