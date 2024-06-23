@@ -16,10 +16,10 @@ $('#budgetten li').droppable({
             //$('#transactions li:visible').last().next().fadeIn();
         });
         $.ajax({
-            url:'/credit/transactieBudget',
+            url:'/credit/transactions',
             data:{
-                tid:ui.draggable.data('id'),
-                bid:$budget.data('id')
+                transaction_id: ui.draggable.data('id'),
+                budget_id: $budget.data('id')
             },
             success:function(data){
                 $budget.find('span.saldo').html(data);
@@ -36,4 +36,4 @@ $(document).ready(function(){
         item_container_id:'#transactions',
         abort_on_small_lists: true
     });
-}); 
+});

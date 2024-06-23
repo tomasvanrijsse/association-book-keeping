@@ -1,6 +1,6 @@
 $('select#creditgroep').change(function(){
     if($(this).val()>0){
-        $.getJSON('/credit/'+$(this).val()+'/bookings',
+        $.getJSON('/credit-groups/'+$(this).val()+'/bookings',
         function(data){
             $('#vrijsaldo').data('vrijsaldo',data.saldo);
 
@@ -121,7 +121,7 @@ $('#saveboekingen').click(function(){
             $stand.attr('disabled','disabled').fadeTo(400,0.2);
             $saldo.addClass('fadeGlow');
 
-            $.ajax('/credit/saveBooking',{
+            $.ajax('/credit-groups/saveBooking',{
                 data:{'budget_id':id,'amount':$(this).val(),'creditgroep_id':$('#creditgroep').val()},
                 type:'POST',
                 success:function(saldo){

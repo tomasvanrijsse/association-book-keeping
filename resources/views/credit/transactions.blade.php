@@ -20,9 +20,9 @@
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
                     <li><a href="/credit">Groeperen</a></li>
-                    <li><a href="/credit/groepen_verdelen">Groepen verdelen</a></li>
+                    <li><a href="/credit-groups/allocate">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
-                    <li class="active"><a href="/credit/transacties">Transacties</a></li>
+                    <li class="active"><a href="/credit/transactions">Transacties</a></li>
                 </ul>
             </div>
         </div>
@@ -33,10 +33,10 @@
                     <span style="width:100px">Huidige stand</span>
                 </div>
                 <ul id="budgetten" class="table">
-                @foreach($budgetten as $budget)
+                @foreach($budgets as $budget)
                     <li class="dropable" data-id="{{ $budget->id }}">
                         <span>{{ $budget->naam }}</span>
-                        <span class="clearfix saldo">{{ prijsify($budget->saldo) }}</span>
+                        <span class="clearfix saldo">{!! prijsify($budget->saldo) !!}</span>
                     </li>
                 @endforeach
                 </ul>
@@ -64,12 +64,12 @@
                     <span style="width:50px">Bedrag</span>
                 </div>
                 <ul id="transactions" class="dropable table">
-                @foreach($transacties as $k => $transactie)
-                    <li data-id="{{$transactie->id }}">
-                        <span>{{$transactie->datum_nl }}</span>
-                        <span title="{{$transactie->description }}">{{$transactie->description }}</span>
-                        <span title="{{$transactie->van_naam }}">{{$transactie->van_naam }}</span>
-                        <span>&euro; {{round($transactie->bedrag) }}</span>
+                @foreach($transactions as $k => $transaction)
+                    <li data-id="{{$transaction->id }}">
+                        <span>{{$transaction->datum }}</span>
+                        <span title="{{$transaction->description }}">{{$transaction->description }}</span>
+                        <span title="{{$transaction->van_naam }}">{{$transaction->van_naam }}</span>
+                        <span>&euro; {{ round($transaction->bedrag) }}</span>
                     </li>
                 @endforeach
                 </ul>

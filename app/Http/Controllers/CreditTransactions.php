@@ -5,31 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Budget;
 use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class DebitController extends Controller {
+class CreditTransactions extends Controller
+{
 
-    public function index(Budget $budget = null)
-    {
-        if(!$budget){
-            $transactions = Transaction::query()
-                ->where('type', 'debet')
-                ->doesntHave('booking')
-                ->get();
-        } else {
-            $transactions = Transaction::query()
-                ->where('type', 'debet')
-                ->onBudget($budget)
-                ->get();
-        }
+    public function index(){
+        $transactions = Transaction::query()
+            ->where('type', 'credit')
+            ->whereNull('creditgroep_id')
+            ->doesntHave('booking')
+            ->get();
 
-        return view('debet/index', [
-            'budgets' => Budget::query()->get(),
-            'activeBudget' => $budget,
+        return view('credit/transactions', [
             'transactions' => $transactions,
+            'budgets' => Budget::all()
         ]);
     }
+
     public function saveBooking(Request $request){
         $transaction = Transaction::query()->find($request->input('transaction_id'));
 
@@ -39,7 +32,7 @@ class DebitController extends Controller {
             ],
             [
                 'budget_id' =>  $request->input('budget_id'),
-                'bedrag' => $transaction->bedrag * -1,
+                'bedrag' => $transaction->bedrag,
             ]
         );
 

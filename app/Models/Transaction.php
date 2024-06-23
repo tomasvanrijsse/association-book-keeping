@@ -28,6 +28,16 @@ class Transaction extends Model {
 
     protected $table = 'transactie';
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('order', function (Builder $builder) {
+            $builder->orderBy('datum', 'desc');
+        });
+    }
+
+
     public function booking(): HasMany
     {
         return $this->hasMany(Booking::class, 'transactie_id');

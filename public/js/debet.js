@@ -13,10 +13,10 @@ $('#budgetten li').droppable({
             $(this).remove();
         });
         $.ajax({
-            url:'/debet/transactieBudget',
+            url:'/debit/saveBooking',
             data:{
-                tid:ui.draggable.data('id'),
-                bid:$budget.data('id')
+                transaction_id: ui.draggable.data('id'),
+                budget_id: $budget.data('id')
             },
             success:function(data){
                 $budget.find('span.saldo').html(data);
@@ -38,7 +38,7 @@ $(document).ready(function(){
     });
 
     $('#budgetDelete').on('click', function(){
-       let confirmed = confirm('Weet je zeker dat je dit budget wil verwijderen?');
+       let confirmed = confirm('Weet je zeker dat je dit budget wilt archiveren?');
 
        if(confirmed){
            $.ajax({

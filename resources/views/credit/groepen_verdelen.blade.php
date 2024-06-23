@@ -18,9 +18,9 @@
             <div class="span6">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
                     <li><a href="/credit">Groeperen</a></li>
-                    <li class="active"><a href="/credit/groepen_verdelen">Groepen verdelen</a></li>
+                    <li class="active"><a href="/credit-groups/allocate">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
-                    <li><a href="/credit/transacties">Transacties</a></li>
+                    <li><a href="/credit/transactions">Transacties</a></li>
                 </ul>
             </div>
         </div>

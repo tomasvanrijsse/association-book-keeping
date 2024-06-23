@@ -16,10 +16,10 @@ $('#budgetten li').droppable({
             //$('#transactions li:visible').last().next().fadeIn();
         });
         $.ajax({
-            url:'/credit/transactieGroep',
+            url:'/credit/assign-transaction',
             data:{
-                tid:ui.draggable.data('id'),
-                gid:$post.data('id')
+                transaction_id: ui.draggable.data('id'),
+                creditGroup_id: $post.data('id')
             },
             success:function(data){
                 $post.find('span.saldo').html(data);
@@ -45,4 +45,4 @@ $(document).ready(function(){
         item_container_id:'#budgetten',
         abort_on_small_lists: true
     });
-}); 
+});

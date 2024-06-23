@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CreditController;
+use App\Http\Controllers\CreditGroupAllocateController;
+use App\Http\Controllers\CreditTransactions;
 use App\Http\Controllers\DebitController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +29,16 @@ Route::post('/budgets', [BudgetController::class,'create']);
 Route::delete('/budgets/{budget}', [BudgetController::class,'delete']);
 
 Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debet');
+Route::post('/debit/saveBooking', [DebitController::class,'saveBooking']);
 
-Route::get('/credit/transacties', [CreditController::class,'transacties']);
-Route::get('/credit/groepen_verdelen', [CreditController::class,'groepen_verdelen']);
+
+Route::get('/credit-groups/allocate', [CreditGroupAllocateController::class,'index']);
+Route::get('/credit-groups/{creditGroup}/bookings', [CreditGroupAllocateController::class,'bookings']);
+Route::post('/credit-groups/saveBooking', [CreditGroupAllocateController::class,'saveBooking']);
+
+Route::get('/credit/transactions', [CreditTransactions::class,'index']);
+Route::post('/credit/transactions', [CreditTransactions::class,'saveBooking']);
+
 Route::get('/credit/{creditGroup?}', [CreditController::class,'index'])->name('credit');
-Route::get('/credit/{creditGroup}/bookings', [CreditController::class,'bookings']);
 Route::post('/credit', [CreditController::class,'createCreditGroup']);
-Route::post('/credit/saveBooking', [CreditController::class,'saveBooking']);
+Route::post('/credit/assign-transaction', [CreditController::class,'assignTransactionToCreditGroup']);

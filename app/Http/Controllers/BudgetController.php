@@ -10,7 +10,7 @@ class BudgetController extends Controller {
 
     public function index(){
         return view('budgets/index', [
-            'budgetten' => Budget::query()->orderBy('naam')->get()
+            'budgetten' => Budget::all()
         ]);
     }
 
@@ -26,32 +26,5 @@ class BudgetController extends Controller {
     {
         $budget->delete();
         return response()->noContent();
-    }
-
-    public function transactieBudget(){
-        $transactie = new transaction($this->input->post('tid'));
-        //boeking aanmaken
-        $boeking = new boeking();
-        $boeking->transactie_id = $transactie->id;
-
-        $bedrag = $transactie->bedrag;
-        if($transactie->type == 'debet'){
-            $bedrag *= -1;
-        }
-
-        if($boeking->readByVars()){
-            $boeking->budget_id = $this->input->post('bid');
-            $boeking->bedrag = $bedrag;
-            $boeking->update();
-        } else {
-            $boeking->budget_id = $this->input->post('bid');
-            $boeking->bedrag = $bedrag;
-            $boeking->datum = $transactie->datum;
-            $boeking->create();
-        }
-
-        $budget = new budget();
-        $budget->read($this->input->post('bid'));
-        echo prijsify($budget->saldo);
     }
 }
