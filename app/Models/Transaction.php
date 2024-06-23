@@ -51,7 +51,6 @@ class Transaction extends Model {
 
     /** CUSTOM transaction FUNCTIONS **/
 
-
     public function deactivate(){
         //transaction uit + debit uitschakelen
         $this->db->where('id',$this->id);
@@ -60,21 +59,6 @@ class Transaction extends Model {
         //credit boeking verwijderen
         $this->db->where('transactie_id',$this->id);
         $this->db->delete('boeking');
-    }
-
-    /* aangepaste exists/countByVars voor de import, zodat niet alle Vars meegenomen worden. */
-    function cleanExists(){
-        $this->db->from($this->getTableName());
-        foreach($this as $attr => $value){
-            if(isset($value) && property_exists($this, $attr) && !in_array($attr,array('status'))){
-                $this->db->where($this->getTableName().'.'.$attr,$value);
-            }
-        }
-        if($this->db->count_all_results()==1){
-            return true;
-        } else {
-            return false;
-        }
     }
 
 }
