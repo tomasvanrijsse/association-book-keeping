@@ -24,12 +24,12 @@
         @endif
         <div class="row">
             <div class="span6">
-                <h3>{{ $activeGroup ? $activeGroup->naam : 'Groepen' }}</h3>
+                <h3>{{ $activePeriod ? $activePeriod->title : 'Groepen' }}</h3>
             </div>
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
                     <li class="active"><a href="/credit">Groeperen</a></li>
-                    <li><a href="/credit-groups/allocate">Groepen verdelen</a></li>
+                    <li><a href="/contribution-periods/allocate">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
                     <li><a href="/credit/transactions">Transacties</a></li>
                 </ul>
@@ -43,16 +43,16 @@
                     <span style="width:80px">Rest</span>
                 </div>
                 <ul id="budgetten" class="table">
-                @foreach($creditGroups as $creditGroup)
-                    <li class="dropable {{ ($creditGroup->id==$activeGroup?->id?'current':'')}}"
-                        data-saldo="{{ round ($creditGroup->saldo) }}" data-id="{{ $creditGroup->id }}">
-                        <span><a href="/credit/{{ $creditGroup->id }}">{{ $creditGroup->naam }}</a></span>
-                        <span>{!! prijsify($creditGroup->credit) !!}</span>
+                @foreach($contributionPeriods as $contributionPeriod)
+                    <li class="dropable {{ ($contributionPeriod->id==$activePeriod?->id?'current':'')}}"
+                        data-saldo="{{ round ($contributionPeriod->balance ?? 0) }}" data-id="{{ $contributionPeriod->id }}">
+                        <span><a href="/credit/{{ $contributionPeriod->id }}">{{ $contributionPeriod->title }}</a></span>
+                        <span>{!! prijsify($contributionPeriod->credit) !!}</span>
                         <span class="clearfix saldo">
-                        @if(round($creditGroup->saldo)==0 && $creditGroup->credit>0)
+                        @if(round($contributionPeriod->balance)==0 && $contributionPeriod->credit>0)
                             &#10003;&nbsp;
                         @else
-                            {!! prijsify($creditGroup->saldo) !!}
+                            {!! prijsify($contributionPeriod->balance) !!}
                         @endif
                         </span>
                     </li>
@@ -66,7 +66,7 @@
                     <div class="control-group">
                         <label class="control-label" for="inputNaam">Naam</label>
                         <div class="controls">
-                            <input type="text" name="naam" id="inputNaam"/>
+                            <input type="text" name="title" id="inputNaam"/>
                         </div>
                     </div>
                     <div class="control-group">
@@ -85,11 +85,11 @@
                 </div>
                 <ul id="transactions" class="dropable table">
                 @foreach($transactions as $transaction)
-                    <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->bedrag) }}">
-                        <span>{{ $transaction->datum }}</span>
+                    <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->amount) }}">
+                        <span>{{ $transaction->date }}</span>
                         <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
-                        <span title="{{ $transaction->van_naam }}">{{ $transaction->van_naam }}</span>
-                        <span>&euro; {{ round($transaction->bedrag) }}</span>
+                        <span title="{{ $transaction->related_party_name }}">{{ $transaction->related_party_name }}</span>
+                        <span>&euro; {{ round($transaction->amount) }}</span>
                     </li>
                 @endforeach
                 </ul>

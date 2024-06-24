@@ -9,42 +9,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
-/**
- * @property $id
- * @property $bedrag
- * @property $van
- * @property $van_naam
- * @property $naar
- * @property $datum
- * @property $description
- * @property $transactietype
- * @property $type
- * @property $creditgroep_id
- * @property $status
- */
 class BankTransaction extends Model {
 
     use SoftDeletes;
-
-    protected $table = 'transactie';
 
     protected static function boot()
     {
         parent::boot();
 
         static::addGlobalScope('order', function (Builder $builder) {
-            $builder->orderBy('datum', 'desc');
+            $builder->orderBy('date', 'desc');
         });
     }
 
 
-    public function booking(): HasMany
+    public function budgetMutation(): HasMany
     {
-        return $this->hasMany(BudgetMutation::class, 'transactie_id');
+        return $this->hasMany(BudgetMutation::class);
     }
 
     public function scopeOnBudget(Builder $query, Budget $budget){
-        $query->whereHas('booking', function (Builder $query) use ($budget) {
+        $query->whereHas('budgetMutation', function (Builder $query) use ($budget) {
             $query->where('budget_id', $budget->id);
         });
     }

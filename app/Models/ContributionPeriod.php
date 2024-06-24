@@ -8,41 +8,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
-/**
- * @property $id
- * @property $naam
- * @property $status
- * @property $jaar
- */
 class ContributionPeriod extends Model {
-
-    protected $table = 'creditgroep';
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(BankTransaction::class,  'creditgroep_id', 'id');
+        return $this->hasMany(BankTransaction::class);
     }
 
-    public function bookings(): HasMany
+    public function budgetMutations(): HasMany
     {
-        return $this->hasMany(BudgetMutation::class,  'creditgroep_id', 'id');
+        return $this->hasMany(BudgetMutation::class);
     }
 
     public function credit(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->transactions->sum('bedrag'),
+            get: fn () => $this->transactions->sum('amount'),
         );
     }
 
     public function debit(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->bookings->sum('bedrag'),
+            get: fn () => $this->budgetMutations->sum('amount'),
         );
     }
 
-    public function saldo(): Attribute
+    public function balance(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->credit - $this->debit,

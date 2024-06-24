@@ -10,16 +10,17 @@ class BudgetController extends Controller {
 
     public function index(){
         return view('budgets/index', [
-            'budgetten' => Budget::all()
+            'budgets' => Budget::all()
         ]);
     }
 
     public function create(Request $request){
         $budget = new budget();
-        $budget->naam = $request->input('naam');
+        $budget->title = $request->input('title');
+        $budget->target = $request->input('target');
         $budget->save();
 
-        return redirect($request->input('redirectUrl'));
+        return redirect('/budgets');
     }
 
     public function delete(Budget $budget)

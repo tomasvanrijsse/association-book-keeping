@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('budget_mutations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('target_budget_id')->constrained(table: 'budgets');
+            $table->foreignId('budget_id')->constrained(table: 'budgets');
             $table->double('amount');
             $table->foreignId('contribution_period_id')->nullable();
             $table->foreignId('bank_transaction_id')->nullable();
-            $table->foreignId('source_budget_id')->nullable()->constrained(table: 'budgets');
             $table->softDeletes();
             $table->timestamps();
         });

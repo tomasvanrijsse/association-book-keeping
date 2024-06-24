@@ -19,7 +19,7 @@ $('#budgetten li').droppable({
             url:'/credit/assign-transaction',
             data:{
                 transaction_id: ui.draggable.data('id'),
-                creditGroup_id: $post.data('id')
+                contribution_period_id: $post.data('id')
             },
             success:function(data){
                 $post.find('span.saldo').html(data);

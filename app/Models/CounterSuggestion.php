@@ -4,17 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property $id
- * @property $status
- * @property $bedrag
- * @property $rekeningnaam
- * @property $gewicht
- * @property $transactie_id
- */
 class CounterSuggestion extends Model {
 
-    protected $table = 'countersuggestie';
     function gewicht_naam()
     {
         switch ($this->gewicht) {

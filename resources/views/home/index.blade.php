@@ -21,8 +21,8 @@
                             </div>
                         </div>
                     </form>
-                    De laatste import was op: {{ $last_import }}<br/>
-                    De laatste transactie is van : {{ $last_transaction }}
+                    De laatste import was op: {{ $lastImport }}<br/>
+                    De laatste transactie is van : {{ $lastTransaction }}
                     @if(session('home_import_error'))
                        <div class="alert alert-error"> {{ session('home_import_error') }}</div>
                     @endif
@@ -37,7 +37,7 @@
             <div class="span6">
                 <h3>Tegengestelde transacties</h3>
                 <div class="well">
-                    Er zijn {{ ($aantalCounter ?: 'geen') }} suggesties.<br/>
+                    Er zijn {{ ($amountOfCounterSuggestions ?: 'geen') }} suggesties.<br/>
                     Bekijk de <a href="/transacties/counter">suggesties</a> voor tegengestelde transacties<br/>
                     <br/>
                     <a href="/home/rescanCounter">Zoek opnieuw naar suggesties</a>

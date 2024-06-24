@@ -14,36 +14,36 @@ class DebitController extends Controller {
     {
         if(!$budget){
             $transactions = BankTransaction::query()
-                ->where('type', 'debet')
-                ->doesntHave('booking')
+                ->where('type', 'debit')
+                ->doesntHave('budgetMutation')
                 ->get();
         } else {
             $transactions = BankTransaction::query()
-                ->where('type', 'debet')
+                ->where('type', 'debit')
                 ->onBudget($budget)
                 ->get();
         }
 
-        return view('debet/index', [
+        return view('debit/index', [
             'budgets' => Budget::query()->get(),
             'activeBudget' => $budget,
             'transactions' => $transactions,
         ]);
     }
-    public function saveBooking(Request $request){
+    public function saveBudgetMutation(Request $request){
         $transaction = BankTransaction::query()->find($request->input('transaction_id'));
 
         BudgetMutation::updateOrCreate(
             [
-                'transactie_id' =>  $transaction->id,
+                'bank_transaction_id' =>  $transaction->id,
             ],
             [
                 'budget_id' =>  $request->input('budget_id'),
-                'bedrag' => $transaction->bedrag * -1,
+                'amount' => $transaction->amount * -1,
             ]
         );
 
         $budget = Budget::find($request->input('budget_id'));
-        echo prijsify($budget->saldo);
+        echo prijsify($budget->balance);
     }
 }

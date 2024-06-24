@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\ContributionPeriodAllocateController;
 use App\Http\Controllers\CreditController;
 use App\Http\Controllers\CreditGroupAllocateController;
 use App\Http\Controllers\CreditTransactions;
@@ -24,21 +25,21 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
+
 Route::get('/budgets', [BudgetController::class,'index'])->name('budgets');
 Route::post('/budgets', [BudgetController::class,'create']);
 Route::delete('/budgets/{budget}', [BudgetController::class,'delete']);
 
-Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debet');
-Route::post('/debit/saveBooking', [DebitController::class,'saveBooking']);
+Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debit');
+Route::post('/debit/saveBudgetMutation', [DebitController::class,'saveBudgetMutation']);
 
-
-Route::get('/credit-groups/allocate', [CreditGroupAllocateController::class,'index']);
-Route::get('/credit-groups/{creditGroup}/bookings', [CreditGroupAllocateController::class,'bookings']);
-Route::post('/credit-groups/saveBooking', [CreditGroupAllocateController::class,'saveBooking']);
+Route::get('/contribution-periods/allocate', [ContributionPeriodAllocateController::class, 'index']);
+Route::get('/contribution-periods/{contributionPeriod}/mutations', [ContributionPeriodAllocateController::class, 'budgetMutations']);
+Route::post('/contribution-periods/saveBudgetMutation', [ContributionPeriodAllocateController::class, 'saveBudgetMutation']);
 
 Route::get('/credit/transactions', [CreditTransactions::class,'index']);
-Route::post('/credit/transactions', [CreditTransactions::class,'saveBooking']);
+Route::post('/credit/transactions', [CreditTransactions::class,'saveBudgetMutation']);
 
-Route::get('/credit/{creditGroup?}', [CreditController::class,'index'])->name('credit');
-Route::post('/credit', [CreditController::class,'createCreditGroup']);
-Route::post('/credit/assign-transaction', [CreditController::class,'assignTransactionToCreditGroup']);
+Route::get('/credit/{contributionPeriod?}', [CreditController::class,'index'])->name('credit');
+Route::post('/credit', [CreditController::class,'createContributionPeriod']);
+Route::post('/credit/assign-transaction', [CreditController::class,'assignTransactionToContributionPeriod']);

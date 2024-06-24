@@ -13,7 +13,7 @@ $('#budgetten li').droppable({
             $(this).remove();
         });
         $.ajax({
-            url:'/debit/saveBooking',
+            url:'/debit/saveBudgetMutation',
             data:{
                 transaction_id: ui.draggable.data('id'),
                 budget_id: $budget.data('id')
@@ -35,18 +35,5 @@ $(document).ready(function(){
         show_first_last: false,
         item_container_id:'#transactions',
         abort_on_small_lists: true
-    });
-
-    $('#budgetDelete').on('click', function(){
-       let confirmed = confirm('Weet je zeker dat je dit budget wilt archiveren?');
-
-       if(confirmed){
-           $.ajax({
-               url: '/budgets/' + $(this).data('budget_id'),
-               type: 'delete',
-           }).done(function() {
-               window.location.replace("/debit");
-           })
-       }
     });
 });

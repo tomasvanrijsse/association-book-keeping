@@ -2,6 +2,23 @@
     <x-slot:title>
         Budgets
     </x-slot:title>
+    <x-slot:scripts>
+        <script>
+            $('.budgetDelete').on('click', function(){
+                let title = $(this).data('budget-title');
+                let confirmed = confirm(`Weet je zeker dat je "${title}" wilt archiveren?`);
+
+                if(confirmed){
+                    $.ajax({
+                        url: '/budgets/' + $(this).data('budget_id'),
+                        type: 'delete',
+                    }).done(function() {
+                        window.location.reload();
+                    })
+                }
+            });
+        </script>
+    </x-slot:scripts>
     <div class="container">
         <div class="row">
             <div class="span7">
@@ -12,16 +29,22 @@
                             <th><strong>Budget</strong></th>
                             <th class="saldo"><strong>Saldo</strong></th>
                             <th class="target"><strong>Increment</strong></th>
+                            <th></th>
                         </thead>
                         <tbody>
-                        @foreach($budgetten as $budget)
+                        @foreach($budgets as $budget)
                             <tr>
-                                <td>{{ $budget->naam }}</td>
-                                <td class="saldo">{!! prijsify($budget->saldo) !!}</td>
+                                <td>{{ $budget->title }}</td>
+                                <td class="saldo">{!! prijsify($budget->balance) !!}</td>
                                 <td class="target">
                                     @if($budget->target)
                                         &euro; {{ $budget->target }}
                                     @endif
+                                </td>
+                                <td>
+                                    <button class="budgetDelete" data-budget_id="{{$budget->id}}" data-budget-title="{{ $budget->title }}">
+                                        <i class="icon-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
@@ -30,6 +53,27 @@
                 </div>
             </div>
         </div>
-    </div>
 
+        <p style="font-weight: bold">Nieuw budget aanmaken</p>
+        <form action="/budgets" id="addBudget" method="POST">
+            @csrf
+            <div class="control-group">
+                <label class="control-label" for="title">Naam</label>
+                <div class="controls">
+                    <input type="text" name="title" id="title"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="target">Maandelijkse inleg</label>
+                <div class="controls">
+                    <input type="text" name="target" id="target"/>
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn">Opslaan</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </x-layout>

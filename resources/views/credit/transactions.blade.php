@@ -20,7 +20,7 @@
             <div class="span6 clearfix">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
                     <li><a href="/credit">Groeperen</a></li>
-                    <li><a href="/credit-groups/allocate">Groepen verdelen</a></li>
+                    <li><a href="/contribution-periods/allocate">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
                     <li class="active"><a href="/credit/transactions">Transacties</a></li>
                 </ul>
@@ -35,26 +35,11 @@
                 <ul id="budgetten" class="table">
                 @foreach($budgets as $budget)
                     <li class="dropable" data-id="{{ $budget->id }}">
-                        <span>{{ $budget->naam }}</span>
-                        <span class="clearfix saldo">{!! prijsify($budget->saldo) !!}</span>
+                        <span>{{ $budget->title }}</span>
+                        <span class="clearfix saldo">{!! prijsify($budget->balance) !!}</span>
                     </li>
                 @endforeach
                 </ul>
-                <hr>
-                <button class="btn btn-form">Nieuw budget toevoegen</button>
-                <form action="/credit/addBudget" id="addBudget" method="POST">
-                    <div class="control-group">
-                        <label class="control-label" for="inputNaam">Naam</label>
-                        <div class="controls">
-                            <input type="text" name="naam" id="inputNaam"/>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn">Opslaan</button>
-                        </div>
-                    </div>
-                </form>
             </div>
             <div class="span7">
                 <div class="table thead">
@@ -64,14 +49,14 @@
                     <span style="width:50px">Bedrag</span>
                 </div>
                 <ul id="transactions" class="dropable table">
-                @foreach($transactions as $k => $transaction)
-                    <li data-id="{{$transaction->id }}">
-                        <span>{{$transaction->datum }}</span>
-                        <span title="{{$transaction->description }}">{{$transaction->description }}</span>
-                        <span title="{{$transaction->van_naam }}">{{$transaction->van_naam }}</span>
-                        <span>&euro; {{ round($transaction->bedrag) }}</span>
-                    </li>
-                @endforeach
+                    @foreach($transactions as $transaction)
+                        <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->amount) }}">
+                            <span>{{ $transaction->date }}</span>
+                            <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
+                            <span title="{{ $transaction->related_party_name }}">{{ $transaction->related_party_name }}</span>
+                            <span>&euro; {{ round($transaction->amount) }}</span>
+                        </li>
+                    @endforeach
                 </ul>
                 <div class="page_navigation pagination"></div>
             </div>

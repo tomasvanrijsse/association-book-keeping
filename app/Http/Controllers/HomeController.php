@@ -10,9 +10,9 @@ class HomeController extends Controller {
 
     public function index(){
         $data = array(
-            'aantalCounter' => CounterSuggestion::query()->where('status', 1)->count(),
-            'last_import' => Setting::query()->where('key','LAST_IMPORT')->value('value'),
-            'last_transaction' => BankTransaction::query()->max('datum')
+            'amountOfCounterSuggestions' => 0, //CounterSuggestion::query()->where('status', 1)->count(),
+            'lastImport' => Setting::query()->where('key','LAST_IMPORT')->value('value'),
+            'lastTransaction' => BankTransaction::query()->max('date')
         );
 
         return view('home/index', $data);

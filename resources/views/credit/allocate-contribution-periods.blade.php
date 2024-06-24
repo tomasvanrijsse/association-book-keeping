@@ -18,7 +18,7 @@
             <div class="span6">
                 <ul class="nav nav-pills pull-right" style="margin-top:15px;">
                     <li><a href="/credit">Groeperen</a></li>
-                    <li class="active"><a href="/credit-groups/allocate">Groepen verdelen</a></li>
+                    <li class="active"><a href="/contribution-periods/allocate">Groepen verdelen</a></li>
                     <li class="disabled"><a href="#">of</a></li>
                     <li><a href="/credit/transactions">Transacties</a></li>
                 </ul>
@@ -33,8 +33,8 @@
                 </div>
                 <ul id="budgetten" class="table">
                 @foreach($budgets as $budget)
-                    <li id="saldo{{ $budget->id }}" data-saldo="{{ number_format( $budget->saldo,2,'.','') }}">
-                        <span>{{ $budget->naam }}</span>
+                    <li id="saldo{{ $budget->id }}" data-saldo="{{ number_format( $budget->balance,2,'.','') }}">
+                        <span>{{ $budget->title }}</span>
                         <span class="clearfix target" data-id="{{ $budget->id }}" data-target="{{ $budget->target }}" >
                             @if($budget->target) {!! prijsify($budget->target) !!} @endif
                         </span>
@@ -49,7 +49,7 @@
                 <ul class="table boeking">
                 @foreach($budgets as $budget)
                     <li id="boeking{{ $budget->id }}">
-                        <span>€</span><input name="boeking[{{ $budget->id }}]" data-id="{{ $budget->id }}" step="any" type="number" min="0" value="0"/>
+                        <span>€</span><input name="boeking[{{ $budget->id }}]" data-id="{{ $budget->id }}" step="any" type="number" value="0"/>
                     </li>
                 @endforeach
                 </ul>
@@ -62,7 +62,7 @@
                 @foreach($budgets as $budget)
                     <li id="stand{{ $budget->id }}">
                         <span>&euro;</span>
-                        <input type="number" value="{{ ($budget->saldo?number_format( $budget->saldo,2,'.',''):0) }}" data-id="{{ $budget->id }}" step="any"/>
+                        <input type="number" value="{{ ($budget->balance?number_format( $budget->balance,2,'.',''):0) }}" data-id="{{ $budget->id }}" step="any"/>
                     </li>
                 @endforeach
                 </ul>
@@ -70,12 +70,12 @@
             <div class="span2" style="text-align:center;">
                 <div class="table thead">
                     <select id="creditgroep">
-                        @foreach($creditgroups as $k => $creditgroup)
-                        <option value="{{ $creditgroup->id }}" {{ ($k==0?'selected':'') }}>
-                            @if(round($creditgroup->saldo)==0 && $creditgroup->credit>0)
+                        @foreach($contributionPeriods as $k => $contributionPeriod)
+                        <option value="{{ $contributionPeriod->id }}" {{ ($k==0?'selected':'') }}>
+                            @if(round($contributionPeriod->balance)==0 && $contributionPeriod->credit>0)
                                 &#10003;&nbsp;
                             @endif
-                            {{ $creditgroup->naam }}
+                            {{ $contributionPeriod->title }}
                         </option>
                         @endforeach
                     </select>

@@ -13,8 +13,8 @@ class CreditTransactions extends Controller
     public function index(){
         $transactions = BankTransaction::query()
             ->where('type', 'credit')
-            ->whereNull('creditgroep_id')
-            ->doesntHave('booking')
+            ->whereNull('contribution_period_id')
+            ->doesntHave('budgetMutation')
             ->get();
 
         return view('credit/transactions', [
@@ -23,20 +23,20 @@ class CreditTransactions extends Controller
         ]);
     }
 
-    public function saveBooking(Request $request){
+    public function saveBudgetMutation(Request $request){
         $transaction = BankTransaction::query()->find($request->input('transaction_id'));
 
         BudgetMutation::updateOrCreate(
             [
-                'transactie_id' =>  $transaction->id,
+                'bank_transaction_id' =>  $transaction->id,
             ],
             [
                 'budget_id' =>  $request->input('budget_id'),
-                'bedrag' => $transaction->bedrag,
+                'amount' => $transaction->amount,
             ]
         );
 
         $budget = Budget::find($request->input('budget_id'));
-        echo prijsify($budget->saldo);
+        echo prijsify($budget->balance);
     }
 }
