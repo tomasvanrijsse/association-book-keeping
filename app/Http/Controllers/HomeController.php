@@ -8,7 +8,7 @@ use App\Models\BankTransaction;
 
 class HomeController extends Controller {
 
-    public function index(){
+    public function index() {
         $data = array(
             'amountOfCounterSuggestions' => 0, //CounterSuggestion::query()->where('status', 1)->count(),
             'lastImport' => Setting::query()->where('key','LAST_IMPORT')->value('value'),

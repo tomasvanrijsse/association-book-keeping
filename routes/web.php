@@ -7,6 +7,7 @@ use App\Http\Controllers\CreditGroupAllocateController;
 use App\Http\Controllers\CreditTransactions;
 use App\Http\Controllers\DebitController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,6 +26,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class,'index'])->name('home');
+
+Route::post('/import', ImportController::class);
 
 Route::get('/budgets', [BudgetController::class,'index'])->name('budgets');
 Route::post('/budgets', [BudgetController::class,'create']);

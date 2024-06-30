@@ -8,11 +8,12 @@
             <div class="span6">
                 <h3>Import</h3>
                 <div class="well">
-                    <form action="/import/upload" method="POST" enctype="multipart/form-data" >
+                    <form action="/import" method="POST" enctype="multipart/form-data" >
+                        @csrf
                         <div class="control-group">
-                            <label class="control-label" for="type">CSV bestand</label>
+                            <label class="control-label" for="type">CAMT053 XML bestand</label>
                             <div class="controls">
-                                <input type="file" value="" id="inputFile" name="csvfile">
+                                <input type="file" value="" id="inputFile" name="bankExport" accept=".xml">
                             </div>
                         </div>
                         <div class="control-group">
@@ -23,8 +24,12 @@
                     </form>
                     De laatste import was op: {{ $lastImport }}<br/>
                     De laatste transactie is van : {{ $lastTransaction }}
-                    @if(session('home_import_error'))
-                       <div class="alert alert-error"> {{ session('home_import_error') }}</div>
+                    @if ($errors->any())
+                        <div class="alert alert-error">
+                            @foreach ($errors->all() as $error)
+                                <p>{{ $error }}</p>
+                            @endforeach
+                        </div>
                     @endif
                     @if(session('home_import_success'))
                        <div class="alert alert-success"> {{ session('home_import_success') }}</div>

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c90b509545303f5bfdba0713fe48406b",
+    "content-hash": "3ac438a43720a94383e1e78d9b19c7b7",
     "packages": [
         {
             "name": "brick/math",
@@ -578,6 +578,50 @@
             "time": "2023-10-12T05:21:21+00:00"
         },
         {
+            "name": "genkgo/camt",
+            "version": "2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/genkgo/camt.git",
+                "reference": "08ff6d7acf1597b25ec8416f21bec9671a5dbf61"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/genkgo/camt/zipball/08ff6d7acf1597b25ec8416f21bec9671a5dbf61",
+                "reference": "08ff6d7acf1597b25ec8416f21bec9671a5dbf61",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "jschaedl/iban-validation": "^2.0",
+                "moneyphp/money": "^4.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "@stable",
+                "phpstan/phpstan": "@stable",
+                "phpunit/phpunit": "@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Genkgo\\Camt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Library to read CAMT files (XML containing bank statements).",
+            "support": {
+                "issues": "https://github.com/genkgo/camt/issues",
+                "source": "https://github.com/genkgo/camt/tree/2.7.0"
+            },
+            "time": "2024-03-22T03:06:27+00:00"
+        },
+        {
             "name": "graham-campbell/result-type",
             "version": "v1.1.2",
             "source": {
@@ -1049,6 +1093,65 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "jschaedl/iban-validation",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jschaedl/iban-validation.git",
+                "reference": "48911a4e9198d75cfbc01ae2c9858d10cc2a0144"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jschaedl/iban-validation/zipball/48911a4e9198d75cfbc01ae2c9858d10cc2a0144",
+                "reference": "48911a4e9198d75cfbc01ae2c9858d10cc2a0144",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "php": "~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+                "symfony/options-resolver": "^5.4|^6|^7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "suggest": {
+                "ext-bcmath": "This library makes use of bcmod function, so an installed bcmath extension is recommended."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Iban\\Validation\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jan Schaedlich",
+                    "email": "mail@janschaedlich.de",
+                    "homepage": "https://www.linkedin.com/in/janschaedlich"
+                }
+            ],
+            "description": "A small library for validating International BankAccount Numbers (IBANs).",
+            "homepage": "https://github.com/jschaedl/iban-validation",
+            "keywords": [
+                "IBAN",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/jschaedl/iban-validation/issues",
+                "source": "https://github.com/jschaedl/iban-validation/tree/v2.4.0"
+            },
+            "time": "2024-03-03T13:12:51+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1882,6 +1985,94 @@
                 }
             ],
             "time": "2024-01-28T23:22:08+00:00"
+        },
+        {
+            "name": "moneyphp/money",
+            "version": "v4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/moneyphp/money.git",
+                "reference": "a1daa7daf159b4044e3d0c34c41fe2be5860e850"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/moneyphp/money/zipball/a1daa7daf159b4044e3d0c34c41fe2be5860e850",
+                "reference": "a1daa7daf159b4044e3d0c34c41fe2be5860e850",
+                "shasum": ""
+            },
+            "require": {
+                "ext-bcmath": "*",
+                "ext-filter": "*",
+                "ext-json": "*",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "require-dev": {
+                "cache/taggable-cache": "^1.1.0",
+                "doctrine/coding-standard": "^12.0",
+                "doctrine/instantiator": "^1.5.0 || ^2.0",
+                "ext-gmp": "*",
+                "ext-intl": "*",
+                "florianv/exchanger": "^2.8.1",
+                "florianv/swap": "^4.3.0",
+                "moneyphp/crypto-currencies": "^1.1.0",
+                "moneyphp/iso-currencies": "^3.4",
+                "php-http/message": "^1.16.0",
+                "php-http/mock-client": "^1.6.0",
+                "phpbench/phpbench": "^1.2.5",
+                "phpunit/phpunit": "^10.5.9",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "psr/cache": "^1.0.1 || ^2.0 || ^3.0",
+                "vimeo/psalm": "~5.20.0"
+            },
+            "suggest": {
+                "ext-gmp": "Calculate without integer limits",
+                "ext-intl": "Format Money objects with intl",
+                "florianv/exchanger": "Exchange rates library for PHP",
+                "florianv/swap": "Exchange rates library for PHP",
+                "psr/cache-implementation": "Used for Currency caching"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Money\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mathias Verraes",
+                    "email": "mathias@verraes.net",
+                    "homepage": "http://verraes.net"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com"
+                },
+                {
+                    "name": "Frederik Bosch",
+                    "email": "f.bosch@genkgo.nl"
+                }
+            ],
+            "description": "PHP implementation of Fowler's Money pattern",
+            "homepage": "http://moneyphp.org",
+            "keywords": [
+                "Value Object",
+                "money",
+                "vo"
+            ],
+            "support": {
+                "issues": "https://github.com/moneyphp/money/issues",
+                "source": "https://github.com/moneyphp/money/tree/v4.5.0"
+            },
+            "time": "2024-02-15T19:47:21+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -4050,6 +4241,73 @@
                 }
             ],
             "time": "2024-06-01T07:50:16+00:00"
+        },
+        {
+            "name": "symfony/options-resolver",
+            "version": "v7.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/options-resolver.git",
+                "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/47aa818121ed3950acd2b58d1d37d08a94f9bf55",
+                "reference": "47aa818121ed3950acd2b58d1d37d08a94f9bf55",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "symfony/deprecation-contracts": "^2.5|^3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\OptionsResolver\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides an improved replacement for the array_replace PHP function",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "config",
+                "configuration",
+                "options"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/options-resolver/tree/v7.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-05-31T14:57:53+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",

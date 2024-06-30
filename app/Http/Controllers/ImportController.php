@@ -1,128 +1,73 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\UploadImportRequest;
+use App\Models\BankTransaction;
+use App\Models\Setting;
+use Carbon\Carbon;
+use Genkgo\Camt\Config;
+use Genkgo\Camt\Reader;
+use Illuminate\Http\RedirectResponse;
+
 class ImportController extends Controller {
 
-    public function upload(){
+    public function __invoke(UploadImportRequest $request): RedirectResponse
+    {
+        Setting::updateOrCreate(
+            [ 'key' => 'LAST_IMPORT' ] ,
+            [ 'value' => date('d-m-Y H:i')]
+        );
 
-        $config['upload_path'] = FCPATH.'/temp/';
-        $config['allowed_types'] = '*';
-        $config['max_size']	= '1000'; //1mb
+        $newCount = 0;
+        $existingCount = 0;
 
-        $this->load->library('upload', $config);
 
-        if ( ! $this->upload->do_upload('csvfile'))
-        {
-            $this->session->set_flashdata('home_import_error', $this->upload->display_errors());
-            redirect('/homeController');
-        }
-        else
-        {
-            saveSetting(LAST_IMPORT, date('d-m-Y H:i'));
+        $xmlString = $request->file('bankExport')->getContent() ?? '';
 
-            $this->db->query('SET SESSION sql_mode =
-                  REPLACE(REPLACE(REPLACE(
-                  @@sql_mode,
-                  "ONLY_FULL_GROUP_BY,", ""),
-                  ",ONLY_FULL_GROUP_BY", ""),
-                  "ONLY_FULL_GROUP_BY", "")');
+        $reader = new Reader(Config::getDefault());
+        $message = $reader->readString($xmlString);
+        $statements = $message->getRecords();
 
-            $upload_data = $this->upload->data();
-            $csvconfig = array(
-                'separator' => ',',
-                'fields' => array('datum','naar','bedrag','type','van_naam','van','transactietype','description')
-            );
-            $this->load->library('csvreader',$csvconfig);
-            $lines = $this->csvreader->parse_file($upload_data['full_path']);
-            $aantal = 0;
-            $bestondal = 0;
-            foreach($lines as $line){
-                $transactie = new transaction();
-                $transactie->fillObject($line,true);
-                $transactie->type = strtolower($transactie->type);
-                $transactie->datum = date('Y-m-d',strtotime($transactie->datum));
-                $transactie->bedrag = str_replace(',','.',str_replace('.','',$transactie->bedrag));
-                $transactie->status = 1;
+        foreach ($statements as $statement) {
+            $entries = $statement->getEntries();
 
-                if(!$transactie->cleanExists()){
-                    $budget_id = false;
-                    if(
-                        $transactie->type == 'debet' &&
-                        (
-                            $transactie->van == 'TRIONL2U NL20TRIO2205459384' ||
-                            $transactie->van == 'TRIONL2U NL42TRIO2205459376'
-                        )
-                    ){
-                        $budget_id = 2; // Triodos Hypotheek
-                    }
-                    if($transactie->van == '' && $transactie->type == 'debet' && $transactie->bedrag < 50 ){
-                        $budget_id = 26; // Triodos bank kosten
-                    }
-                    if($transactie->van == 'INGBNL2A NL98INGB0000845745' && $transactie->type == 'debet' ){
-                        $budget_id = 7; // Ziggo internet
-                    }
-                    if($transactie->van == 'INGBNL2A NL32INGB0651754763' && $transactie->type == 'debet' ){
-                        $budget_id = 6; // AM assuradeuren
-                    }
-                    if($transactie->van == 'INGBNL2A NL18INGB0005309282' || $transactie->van == 'INGBNL2A NL13INGB0000008710'){
-                        $budget_id = 4; // greenchoice of evides
-                    }
-                    if($transactie->van == 'RABONL2U NL28RABO0134901428' && $transactie->type == 'debet' ){
-                        $budget_id = 8; // ambachstheer
-                    }
-                    if(
-                    	$transactie->type == 'debet' &&
-                        (
-                        	strpos(strtolower($transactie->description),'afvalstoffenheffing') !== false ||
-                        	$transactie->van == 'BNGHNL2G NL81BNGH0285084321' ||
-                        	$transactie->van == 'ABNANL2A NL97ABNA0644512113'
-                    	)
-                    ){
-                        $budget_id = 3; // gemeentelijke belastingen
-                    }
-                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description),'boodschappen') !== false){
-                        $budget_id = 22; // Boodschappen
-                    }
-                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'glazenwasser') !== false ){
-                        $budget_id = 27; // glazenwasser
-                    }
-                    if($transactie->type == 'debet' && strpos(strtolower($transactie->description), 'schoonmaak') !== false ){
-                        $budget_id = 28;
-                    }
+            foreach ($entries as $entry) {
+                /** @var BankTransaction $transaction */
+                $transaction = BankTransaction::query()
+                    ->firstOrNew(['entry_id' => $entry->getReference()]);
 
-                    if($transactie->create()){
-                        if($budget_id){
-                            $boeking = new boeking();
-                            $bedrag = $transactie->bedrag;
-                            if($transactie->type == 'debet'){
-                                $bedrag *= -1;
-                            }
-                            $boeking->bedrag = $bedrag;
-                            $boeking->budget_id = $budget_id;
-                            $boeking->transactie_id = $transactie->id;
-                            $boeking->datum = $transactie->datum;
-                            $boeking->create();
-                        }
-                        $aantal++;
-                    }
-                } else {
-                    $bestondal++;
+                if ($transaction->exists) {
+                    $existingCount++;
+                    continue;
                 }
-            }
-            if($aantal == 0){
-                $this->session->set_flashdata('home_import_notice','Alle transacties waren al eerder geïmporteerd');
-            } else {
-                $this->session->set_flashdata('home_import_success', 'Er zijn '.$aantal.' van de '.count($lines).' transacties geïmporteerd ('.floor($aantal/count($lines)*100).'%)');
-                if($bestondal>0){
-                    $this->session->set_flashdata('home_import_notice',$bestondal.' transacties waren al eerder geïmporteerd');
+                $newCount++;
+
+                $relatedParty = $entry->getTransactionDetail()?->getRelatedParty();
+
+                $transaction->amount = $entry->getAmount()->absolute()->getAmount() / 100;
+                if ($relatedParty) {
+                    $transaction->related_party_name = $relatedParty->getRelatedPartyType()->getName();
+                    $transaction->related_party_account = $relatedParty->getAccount()?->getIdentification();
                 }
+                $transaction->date = new Carbon($entry->getBookingDate());
+                $transaction->description = $entry->getTransactionDetail()?->getRemittanceInformation()->getUnstructuredBlock()->getMessage();
+                $transaction->type = $entry->getCreditDebitIndicator() === "CRDT" ? 'credit' : 'debit';
+
+                $transaction->save();
             }
-
-            //find new counter transactions
-            $this->load->model('counterSuggestion');
-            $this->countersuggestie->findCounterTransactions();
-
-            redirect('/homeController');
         }
+
+        $totalCount = $existingCount + $newCount;
+        if($newCount == 0){
+            $request->session()->flash('home_import_notice','Alle transacties waren al eerder geïmporteerd');
+        } else {
+            $request->session()->flash('home_import_success', 'Er zijn '.$newCount.' van de '.$totalCount.' transacties geïmporteerd ('.floor($newCount/$totalCount*100).'%)');
+            if($existingCount>0){
+                $request->session()->flash('home_import_notice', $existingCount.' transacties waren al eerder geïmporteerd');
+            }
+        }
+
+        return redirect()->route('home');
     }
+
 }
