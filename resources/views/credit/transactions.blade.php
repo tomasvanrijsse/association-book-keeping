@@ -36,7 +36,7 @@
                 @foreach($budgets as $budget)
                     <li class="dropable" data-id="{{ $budget->id }}">
                         <span>{{ $budget->title }}</span>
-                        <span class="clearfix saldo">{!! prijsify($budget->balance) !!}</span>
+                        <span class="clearfix saldo">{{ Number::currency($budget->balance, 'EUR') }}</span>
                     </li>
                 @endforeach
                 </ul>

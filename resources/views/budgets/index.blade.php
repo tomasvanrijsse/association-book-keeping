@@ -35,10 +35,10 @@
                         @foreach($budgets as $budget)
                             <tr>
                                 <td><a href="/budgets/{{$budget->id}}">{{ $budget->title }}<a/></td>
-                                <td class="saldo">{!! prijsify($budget->balance) !!}</td>
+                                <td class="saldo">{{ Number::currency($budget->balance, 'EUR') }}</td>
                                 <td class="target">
                                     @if($budget->target)
-                                        &euro; {{ $budget->target }}
+                                        {{ Number::currency($budget->target, 'EUR') }}
                                     @endif
                                 </td>
                                 <td>
