@@ -34,7 +34,7 @@
                 @foreach($budgets as $budget)
                     <li class="dropable {{ ($budget->id==$activeBudget?->id?'current':'') }}" data-id="{{ $budget->id }}" data-saldo="{{ round($budget->balance) }}">
                         <span><a href="/debit/{{ ($budget->id) }}">{{ $budget->title }}</a></span>
-                        <span class="clearfix saldo">{!! prijsify($budget->balance) !!}</span>
+                        <span class="clearfix saldo">{{ Number::currency($budget->balance, in: 'EUR') }}</span>
                     </li>
                 @endforeach
                 </ul>
@@ -58,7 +58,7 @@
                         <span>{{ $transaction->date }}</span>
                         <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
                         <span title="{{ $transaction->related_party_name }}">{{ $transaction->related_party_name }}</span>
-                        <span title="{{ prijsify($transaction->amount) }}">&euro; {{ round($transaction->amount) }}</span>
+                        <span>{{ Number::currency($transaction->amount, 'EUR') }}</span>
                     </li>
                 @endforeach
                 </ul>

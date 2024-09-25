@@ -36,7 +36,7 @@
                     <li id="saldo{{ $budget->id }}" data-saldo="{{ number_format( $budget->balance,2,'.','') }}">
                         <span>{{ $budget->title }}</span>
                         <span class="clearfix target" data-id="{{ $budget->id }}" data-target="{{ $budget->target }}" >
-                            @if($budget->target) {!! prijsify($budget->target) !!} @endif
+                            @if($budget->target) {{ Number::currency($budget->target, 'EUR') }} @endif
                         </span>
                     </li>
                 @endforeach

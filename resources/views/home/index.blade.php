@@ -39,15 +39,6 @@
                     @endif
                 </div>
             </div>
-            <div class="span6">
-                <h3>Tegengestelde transacties</h3>
-                <div class="well">
-                    Er zijn {{ ($amountOfCounterSuggestions ?: 'geen') }} suggesties.<br/>
-                    Bekijk de <a href="/transacties/counter">suggesties</a> voor tegengestelde transacties<br/>
-                    <br/>
-                    <a href="/home/rescanCounter">Zoek opnieuw naar suggesties</a>
-                </div>
-            </div>
         </div>
     </div>
 </x-layout>

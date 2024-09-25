@@ -20,9 +20,10 @@
         </script>
     </x-slot:scripts>
     <div class="container">
+        <h3>Status quo</h3>
+
         <div class="row">
             <div class="span7">
-                <h3>Status quo</h3>
                 <div class="well">
                     <table class="budgettable table">
                         <thead>
@@ -35,10 +36,10 @@
                         @foreach($budgets as $budget)
                             <tr>
                                 <td><a href="/budgets/{{$budget->id}}">{{ $budget->title }}<a/></td>
-                                <td class="saldo">{!! prijsify($budget->balance) !!}</td>
+                                <td class="saldo">{{ Number::currency($budget->balance, 'EUR') }}</td>
                                 <td class="target">
                                     @if($budget->target)
-                                        &euro; {{ $budget->target }}
+                                        {{ Number::currency($budget->target, 'EUR') }}
                                     @endif
                                 </td>
                                 <td>
@@ -52,33 +53,34 @@
                     </table>
                 </div>
             </div>
+            <div class="span4" style="margin-left:40px;">
+                @if($editBudget)
+                    <p style="font-weight: bold">Budget aanpassen</p>
+                @else
+                    <p style="font-weight: bold">Nieuw budget aanmaken</p>
+                @endif
+                <form action="/budgets/{{ $editBudget?->id }}" id="addBudget" method="POST">
+                    @csrf
+                    @if($editBudget) @method('PATCH') @endif
+                    <div class="control-group">
+                        <label class="control-label" for="title">Naam</label>
+                        <div class="controls">
+                            <input type="text" name="title" id="title" @if($editBudget)value="{{$editBudget->title}}"@endif />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="target">Maandelijkse inleg</label>
+                        <div class="controls">
+                            <input type="number" name="target" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn">Opslaan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        @if($editBudget)
-            <p style="font-weight: bold">Budget aanpassen</p>
-        @else
-            <p style="font-weight: bold">Nieuw budget aanmaken</p>
-        @endif
-        <form action="/budgets/{{ $editBudget?->id }}" id="addBudget" method="POST">
-            @csrf
-            @if($editBudget) @method('PATCH') @endif
-            <div class="control-group">
-                <label class="control-label" for="title">Naam</label>
-                <div class="controls">
-                    <input type="text" name="title" id="title" @if($editBudget)value="{{$editBudget->title}}"@endif />
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="target">Maandelijkse inleg</label>
-                <div class="controls">
-                    <input type="number" name="target" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
-                </div>
-            </div>
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn">Opslaan</button>
-                </div>
-            </div>
-        </form>
     </div>
 </x-layout>
