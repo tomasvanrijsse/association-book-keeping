@@ -1,0 +1,63 @@
+#budgetten span:nth-child(1){
+    width:280px;
+}
+#budgetten span:nth-child(2){
+    width:100px;
+}
+#budgetten span:nth-child(2){
+    cursor:pointer;
+}
+#budgetten span:nth-child(2):hover:after{
+    content:' ➲';
+    display:inline;
+}
+li input[type=number]   {
+    width: 95px;
+    margin-top: 5px;
+    height: 19px;
+    margin-bottom: 0px;
+    padding: 2px 6px;
+}
+#overlay{width:100%;height:100%;background-color:white;opacity: 0.7;position:absolute;left:0;top:0;z-index:25;}
+#creditgroep {position:relative;z-index: 50;}
+#pilehider {
+    display:block;
+    background-color:#FFF;
+}
+#pilehider.s20 {height: 0px;}
+#pilehider.s19 {height: 12px;}
+#pilehider.s18 {height: 22px;}
+#pilehider.s17 {height: 31px;}
+#pilehider.s16 {height: 41px;}
+#pilehider.s15 {height: 50px;}
+#pilehider.s14 {height: 60px;}
+#pilehider.s13 {height: 70px;}
+#pilehider.s12 {height: 79px;}
+#pilehider.s11 {height: 89px;}
+#pilehider.s10 {height: 98px;}
+#pilehider.s9 {height: 108px;}
+#pilehider.s8 {height: 117px;}
+#pilehider.s7 {height: 127px;}
+#pilehider.s6 {height: 137px;}
+#pilehider.s5 {height: 147px;}
+#pilehider.s4 {height: 156px;}
+#pilehider.s3 {height: 166px;}
+#pilehider.s2 {height: 176px;}
+#pilehider.s1 {height: 185px;}
+#pilehider.s0 {height: 230px;}
+#pilehider.s-1 {height: 230px;background-image:url('/img/broke.png');background-repeat: no-repeat;background-position: 0 60px;}
+
+@-webkit-keyframes fadeGlow {
+    0%  { opacity: 0.05; }
+    50% { opacity: 0.7;  }
+    100%{ opacity: 0.05; }
+}
+@keyframes fadeGlow {
+    0%  { opacity: 0.05; }
+    50% { opacity: 0.7;  }
+    100%{ opacity: 0.05; }
+}
+
+.fadeGlow {
+    -webkit-animation: fadeGlow 2s linear infinite;
+}
