@@ -8,10 +8,19 @@ use Illuminate\Http\Response;
 
 class BudgetController extends Controller {
 
-    public function index(){
+    public function index(?Budget $budget = null) {
         return view('budgets/index', [
-            'budgets' => Budget::all()
+            'budgets' => Budget::all(),
+            'editBudget' => $budget
         ]);
+    }
+
+    public function update(Request $request, Budget $budget){
+        $budget->title = $request->input('title');
+        $budget->target = $request->input('target');
+        $budget->save();
+
+        return redirect('/budgets');
     }
 
     public function create(Request $request){

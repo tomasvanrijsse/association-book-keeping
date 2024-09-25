@@ -34,8 +34,9 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     Route::post('/import', ImportController::class);
 
-    Route::get('/budgets', [BudgetController::class,'index'])->name('budgets');
+    Route::get('/budgets/{budget?}', [BudgetController::class,'index'])->name('budgets');
     Route::post('/budgets', [BudgetController::class,'create']);
+    Route::patch('/budgets/{budget}', [BudgetController::class,'update']);
     Route::delete('/budgets/{budget}', [BudgetController::class,'delete']);
 
     Route::get('/debit/{budget?}', [DebitController::class,'index'])->name('debit');

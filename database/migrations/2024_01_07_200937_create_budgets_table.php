@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('budgets', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('target')->nullable();
+            $table->double('target')->nullable();
             $table->text('target_description')->nullable();
             $table->timestamps();
             $table->softDeletes();

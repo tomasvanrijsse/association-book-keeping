@@ -34,7 +34,7 @@
                         <tbody>
                         @foreach($budgets as $budget)
                             <tr>
-                                <td>{{ $budget->title }}</td>
+                                <td><a href="/budgets/{{$budget->id}}">{{ $budget->title }}<a/></td>
                                 <td class="saldo">{!! prijsify($budget->balance) !!}</td>
                                 <td class="target">
                                     @if($budget->target)
@@ -54,19 +54,24 @@
             </div>
         </div>
 
-        <p style="font-weight: bold">Nieuw budget aanmaken</p>
-        <form action="/budgets" id="addBudget" method="POST">
+        @if($editBudget)
+            <p style="font-weight: bold">Budget aanpassen</p>
+        @else
+            <p style="font-weight: bold">Nieuw budget aanmaken</p>
+        @endif
+        <form action="/budgets/{{ $editBudget?->id }}" id="addBudget" method="POST">
             @csrf
+            @if($editBudget) @method('PATCH') @endif
             <div class="control-group">
                 <label class="control-label" for="title">Naam</label>
                 <div class="controls">
-                    <input type="text" name="title" id="title"/>
+                    <input type="text" name="title" id="title" @if($editBudget)value="{{$editBudget->title}}"@endif />
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label" for="target">Maandelijkse inleg</label>
                 <div class="controls">
-                    <input type="text" name="target" id="target"/>
+                    <input type="number" name="target" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
                 </div>
             </div>
             <div class="control-group">
