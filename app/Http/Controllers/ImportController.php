@@ -50,7 +50,7 @@ class ImportController extends Controller {
                     $transaction->related_party_account = $relatedParty->getAccount()?->getIdentification();
                 }
                 $transaction->date = new Carbon($entry->getBookingDate());
-                $transaction->description = $entry->getTransactionDetail()?->getRemittanceInformation()->getUnstructuredBlock()->getMessage();
+                $transaction->description = $entry->getTransactionDetail()?->getRemittanceInformation()?->getUnstructuredBlock()->getMessage();
                 $transaction->type = $entry->getCreditDebitIndicator() === "CRDT" ? 'credit' : 'debit';
 
                 $transaction->save();
