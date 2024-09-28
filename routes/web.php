@@ -9,6 +9,7 @@ use App\Http\Controllers\DebitController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImportController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MandatesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,8 +32,11 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     });
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
-
+    Route::get('/export', \App\Http\Controllers\ExportsController::class)->name('export');
     Route::post('/import', ImportController::class);
+
+    Route::get('/mandates', [MandatesController::class, 'index'])->name('mandates');
+    Route::post('/mandates', [MandatesController::class, 'store']);
 
     Route::get('/budgets/{budget?}', [BudgetController::class,'index'])->name('budgets');
     Route::post('/budgets', [BudgetController::class,'create']);

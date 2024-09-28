@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\ContributionPeriod;
 use App\Models\BankTransaction;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 
 class CreditController extends Controller {
 
@@ -15,13 +17,16 @@ class CreditController extends Controller {
             $transactions = BankTransaction::query()
                 ->where('type', 'credit')
                 ->whereNull('contribution_period_id')
-                ->doesntHave('budgetMutation')
+                ->doesntHave('budgetMutations')
                 ->get();
         } else {
             $transactions = BankTransaction::query()
                 ->where('contribution_period_id',$contributionPeriod->id)
                 ->get();
         }
+
+        $lastContributionPeriod = ContributionPeriod::query()->orderByDesc('id')->first();
+        $newContributionPeriodDate = Carbon::create(year: $lastContributionPeriod->year, month: $lastContributionPeriod->month + 1);
 
         return view('credit.assign-contribution-periods',[
             'transactions' => $transactions,
@@ -30,6 +35,7 @@ class CreditController extends Controller {
                 ->with('transactions','budgetMutations')
                 ->orderBy('id','desc')
                 ->get(),
+            'newContributionPeriodDate' => $newContributionPeriodDate,
         ]);
     }
 
@@ -37,6 +43,8 @@ class CreditController extends Controller {
     {
         $contributionPeriod = new ContributionPeriod();
         $contributionPeriod->title = $request->input('title');
+        $contributionPeriod->month = $request->input('month');
+        $contributionPeriod->year = $request->input('year');
         $contributionPeriod->save();
 
         return redirect('/credit');
@@ -50,7 +58,7 @@ class CreditController extends Controller {
         $transaction->contribution_period_id = $period->id;
         $transaction->save();
 
-        echo prijsify($period->balance);
+        echo Number::currency($period->balance, 'EUR');
     }
 
 }

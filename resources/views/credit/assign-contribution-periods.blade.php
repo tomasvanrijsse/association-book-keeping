@@ -66,7 +66,19 @@
                     <div class="control-group">
                         <label class="control-label" for="inputNaam">Naam</label>
                         <div class="controls">
-                            <input type="text" name="title" id="inputNaam"/>
+                            <input type="text" name="title" id="inputNaam" value="{{ $newContributionPeriodDate->translatedFormat('F Y') }}"/>
+                            <select name="month">
+                                @for($i=1; $i<=12;$i++)
+                                    <option @selected($i==$newContributionPeriodDate->month) value="{{ $i }}">
+                                        {{ \Carbon\Carbon::create(month:$i)->translatedFormat('F') }}
+                                    </option>
+                                @endfor
+                            </select>
+                            <select name="year">
+                                @for($i=2020; $i<=\Carbon\Carbon::now()->year; $i++)
+                                    <option @selected($i == $newContributionPeriodDate->year) value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">

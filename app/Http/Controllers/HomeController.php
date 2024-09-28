@@ -3,26 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\CounterSuggestion;
+use App\Models\Mandate;
 use App\Models\Setting;
 use App\Models\BankTransaction;
+use Carbon\Carbon;
 
 class HomeController extends Controller {
 
     public function index() {
         $data = array(
-            'amountOfCounterSuggestions' => 0, //CounterSuggestion::query()->where('status', 1)->count(),
-            'lastImport' => Setting::query()->where('key','LAST_IMPORT')->value('value'),
-            'lastTransaction' => BankTransaction::query()->max('date')
+            'lastImport' => new Carbon(Setting::query()->where('key','LAST_IMPORT')->value('value')),
+            'lastTransaction' => new Carbon(BankTransaction::query()->max('date')),
+            'mandatesWithoutBudget' => Mandate::whereNull('budget_id')->count(),
         );
 
         return view('home/index', $data);
-    }
-
-    public function rescanCounter(){
-        //find new counter transactions
-        CounterSuggestion::findCounterTransactions();
-
-        return redirect('/home');
     }
 
 }

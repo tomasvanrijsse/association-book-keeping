@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\UploadImportRequest;
 use App\Models\BankTransaction;
+use App\Models\BudgetMutation;
+use App\Models\Mandate;
 use App\Models\Setting;
 use Carbon\Carbon;
 use Genkgo\Camt\Config;
@@ -20,7 +22,6 @@ class ImportController extends Controller {
 
         $newCount = 0;
         $existingCount = 0;
-
 
         $xmlString = $request->file('bankExport')->getContent() ?? '';
 
@@ -44,6 +45,17 @@ class ImportController extends Controller {
 
                 $relatedParty = $entry->getTransactionDetail()?->getRelatedParty();
 
+                $mandateId = $entry->getTransactionDetail()->getReference()?->getMandateId();
+                if($mandateId) {
+                    $mandate = Mandate::firstOrCreate([
+                        'external_id' => $entry->getTransactionDetail()->getReference()->getMandateId()
+                    ], [
+                        'related_party_name' => $relatedParty->getRelatedPartyType()->getName()
+                    ]);
+                } else {
+                    $mandate = null;
+                }
+
                 $transaction->amount = $entry->getAmount()->absolute()->getAmount() / 100;
                 if ($relatedParty) {
                     $transaction->related_party_name = $relatedParty->getRelatedPartyType()->getName();
@@ -54,6 +66,14 @@ class ImportController extends Controller {
                 $transaction->type = $entry->getCreditDebitIndicator() === "CRDT" ? 'credit' : 'debit';
 
                 $transaction->save();
+
+                if($mandate?->budget_id) {
+                    BudgetMutation::create([
+                        'bank_transaction_id' => $transaction->id,
+                        'amount' => $transaction->amount * -1,
+                        'budget_id' => $mandate->budget_id
+                    ]);
+                }
             }
         }
 
