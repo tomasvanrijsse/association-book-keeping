@@ -15,7 +15,7 @@ class CreditTransactions extends Controller
         $transactions = BankTransaction::query()
             ->where('type', 'credit')
             ->whereNull('contribution_period_id')
-            ->doesntHave('budgetMutation')
+            ->doesntHave('budgetMutations')
             ->get();
 
         return view('credit/transactions', [

@@ -16,7 +16,7 @@ class DebitController extends Controller {
         if(!$budget){
             $transactions = BankTransaction::query()
                 ->where('type', 'debit')
-                ->doesntHave('budgetMutation')
+                ->doesntHave('budgetMutations')
                 ->get();
         } else {
             $transactions = BankTransaction::query()

@@ -31,6 +31,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     });
 
     Route::get('/home', [HomeController::class,'index'])->name('home');
+    Route::get('/export', \App\Http\Controllers\ExportsController::class)->name('export');
 
     Route::post('/import', ImportController::class);
 
