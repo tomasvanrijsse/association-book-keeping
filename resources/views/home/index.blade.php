@@ -22,8 +22,8 @@
                             </div>
                         </div>
                     </form>
-                    De laatste import was op: {{ $lastImport }}<br/>
-                    De laatste transactie is van : {{ $lastTransaction }}
+                    De laatste import was op: {{ $lastImport->format('d-m-Y') }}<br/>
+                    De laatste transactie is van : {{ $lastTransaction->format('d-m-Y') }}
                     @if ($errors->any())
                         <div class="alert alert-error">
                             @foreach ($errors->all() as $error)
@@ -37,6 +37,11 @@
                     @if(session('home_import_notice'))
                        <div class="alert"> {{ session('home_import_notice') }}</div>
                     @endif
+                </div>
+                <h3>Automatische incasso's</h3>
+                <div class="well">
+                    Er zijn {{ $mandatesWithoutBudget }} automatische incasso's die gekoppeld kunnen worden aan een budget.
+                    <a href="/mandates">Automatische incasso's</a>
                 </div>
             </div>
 
