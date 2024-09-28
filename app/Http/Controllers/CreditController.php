@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ContributionPeriod;
 use App\Models\BankTransaction;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Number;
@@ -24,6 +25,9 @@ class CreditController extends Controller {
                 ->get();
         }
 
+        $lastContributionPeriod = ContributionPeriod::query()->orderByDesc('id')->first();
+        $newContributionPeriodDate = Carbon::create(year: $lastContributionPeriod->year, month: $lastContributionPeriod->month + 1);
+
         return view('credit.assign-contribution-periods',[
             'transactions' => $transactions,
             'activePeriod' => $contributionPeriod,
@@ -31,6 +35,7 @@ class CreditController extends Controller {
                 ->with('transactions','budgetMutations')
                 ->orderBy('id','desc')
                 ->get(),
+            'newContributionPeriodDate' => $newContributionPeriodDate,
         ]);
     }
 
@@ -38,6 +43,8 @@ class CreditController extends Controller {
     {
         $contributionPeriod = new ContributionPeriod();
         $contributionPeriod->title = $request->input('title');
+        $contributionPeriod->month = $request->input('month');
+        $contributionPeriod->year = $request->input('year');
         $contributionPeriod->save();
 
         return redirect('/credit');
