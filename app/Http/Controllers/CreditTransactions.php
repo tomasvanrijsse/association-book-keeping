@@ -6,6 +6,7 @@ use App\Models\BudgetMutation;
 use App\Models\Budget;
 use App\Models\BankTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 
 class CreditTransactions extends Controller
 {
@@ -37,6 +38,6 @@ class CreditTransactions extends Controller
         );
 
         $budget = Budget::find($request->input('budget_id'));
-        echo prijsify($budget->balance);
+        echo Number::currency($budget->balance, 'EUR');
     }
 }

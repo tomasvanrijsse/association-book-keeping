@@ -6,6 +6,7 @@ use App\Models\ContributionPeriod;
 use App\Models\BankTransaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 
 class CreditController extends Controller {
 
@@ -50,7 +51,7 @@ class CreditController extends Controller {
         $transaction->contribution_period_id = $period->id;
         $transaction->save();
 
-        echo prijsify($period->balance);
+        echo Number::currency($period->balance, 'EUR');
     }
 
 }

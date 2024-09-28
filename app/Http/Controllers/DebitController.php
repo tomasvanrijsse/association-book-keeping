@@ -7,6 +7,7 @@ use App\Models\Budget;
 use App\Models\BankTransaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Number;
 
 class DebitController extends Controller {
 
@@ -44,6 +45,6 @@ class DebitController extends Controller {
         );
 
         $budget = Budget::find($request->input('budget_id'));
-        echo prijsify($budget->balance);
+        echo Number::currency($budget->balance, 'EUR');
     }
 }
