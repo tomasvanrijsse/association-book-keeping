@@ -51,7 +51,7 @@
                 <ul id="transactions" class="dropable table">
                     @foreach($transactions as $transaction)
                         <li data-id="{{ $transaction->id }}" data-bedrag="{{ round($transaction->amount) }}">
-                            <span>{{ $transaction->date }}</span>
+                            <span>{{ $transaction->date->format('d-m-Y') }}</span>
                             <span title="{{ $transaction->description }}">{{ $transaction->description }}</span>
                             <span title="{{ $transaction->related_party_name }}">{{ $transaction->related_party_name }}</span>
                             <span>&euro; {{ round($transaction->amount) }}</span>
