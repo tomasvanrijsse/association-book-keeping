@@ -79,7 +79,7 @@
                     <div class="control-group">
                         <label class="control-label" for="target">Maandelijkse inleg</label>
                         <div class="controls">
-                            <input type="number" name="target" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
+                            <input type="number" name="target" step="any" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
                         </div>
                     </div>
                     <div class="control-group">
