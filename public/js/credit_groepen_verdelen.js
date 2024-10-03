@@ -100,24 +100,22 @@ $('#saveboekingen').click(function(){
     if($(this).hasClass('disabled')) return false;
 
     $('.boeking input').each(function(){
-        if($(this).val() >= 0){
-            var $input  = $(this),
-                id      = $input.data('id'),
-                $saldo  = $('#saldo'+$(this).data('id')),
-                $stand  = $('#stand'+id);
-            $input.attr('disabled','disabled').fadeTo(400,0.2);
-            $stand.attr('disabled','disabled').fadeTo(400,0.2);
-            $saldo.addClass('fadeGlow');
+        var $input  = $(this),
+            id      = $input.data('id'),
+            $saldo  = $('#saldo'+$(this).data('id')),
+            $stand  = $('#stand'+id);
+        $input.attr('disabled','disabled').fadeTo(400,0.2);
+        $stand.attr('disabled','disabled').fadeTo(400,0.2);
+        $saldo.addClass('fadeGlow');
 
-            $.ajax('/contribution-periods/saveBudgetMutation',{
-                data:{'budget_id':id,'amount':$(this).val(),'contribution_period_id':$('#creditgroep').val()},
-                type:'POST',
-                success:function(){
-                    $saldo.removeClass('fadeGlow');
-                    $input.fadeTo(400,1).removeAttr('disabled','');
-                    $stand.fadeTo(400,1).removeAttr('disabled','');
-                }
-            });
-        }
+        $.ajax('/contribution-periods/saveBudgetMutation',{
+            data:{'budget_id':id,'amount':$(this).val(),'contribution_period_id':$('#creditgroep').val()},
+            type:'POST',
+            success:function(){
+                $saldo.removeClass('fadeGlow');
+                $input.fadeTo(400,1).removeAttr('disabled','');
+                $stand.fadeTo(400,1).removeAttr('disabled','');
+            }
+        });
     });
 })
