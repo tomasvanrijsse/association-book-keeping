@@ -22,7 +22,8 @@ $('#budgetten li').droppable({
                 contribution_period_id: $post.data('id')
             },
             success:function(data){
-                $post.find('span.saldo').html(data);
+                $post.find('span.saldo').html(data.balance);
+                $post.find('span.credit').html(data.credit);
                 var $cur = $('#budgetten .current');
                 $cur.data('saldo',($cur.data('saldo')-ui.draggable.data('bedrag')));
                 $cur.find('span.saldo').html('€ '+$cur.data('saldo'));

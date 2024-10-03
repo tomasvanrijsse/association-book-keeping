@@ -47,7 +47,7 @@
                     <li class="dropable {{ ($contributionPeriod->id==$activePeriod?->id?'current':'')}}"
                         data-saldo="{{ round ($contributionPeriod->balance ?? 0) }}" data-id="{{ $contributionPeriod->id }}">
                         <span><a href="/credit/{{ $contributionPeriod->id }}">{{ $contributionPeriod->title }}</a></span>
-                        <span>{{ Number::currency($contributionPeriod->credit, 'EUR') }}</span>
+                        <span class="credit">{{ Number::currency($contributionPeriod->credit, 'EUR') }}</span>
                         <span class="clearfix saldo">
                         @if(round($contributionPeriod->balance)==0 && $contributionPeriod->credit>0)
                             &#10003;&nbsp;

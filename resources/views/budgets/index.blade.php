@@ -50,6 +50,14 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="border-top: 1px solid #333;">Totaal</td>
+                                <td style="border-top: 1px solid #333;">{{ Number::currency($budgets->sum('balance'), 'EUR') }} </td>
+                                <td style="border-top: 1px solid #333;"></td>
+                                <td style="border-top: 1px solid #333;"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -59,7 +67,7 @@
                 @else
                     <p style="font-weight: bold">Nieuw budget aanmaken</p>
                 @endif
-                <form action="/budgets/{{ $editBudget?->id }}" id="addBudget" method="POST">
+                <form action="{{ $editBudget ? '/budgets/'.$editBudget->id : '/new-budget' }}" id="addBudget" method="POST">
                     @csrf
                     @if($editBudget) @method('PATCH') @endif
                     <div class="control-group">
@@ -71,7 +79,7 @@
                     <div class="control-group">
                         <label class="control-label" for="target">Maandelijkse inleg</label>
                         <div class="controls">
-                            <input type="number" name="target" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
+                            <input type="number" name="target" step="any" id="target" @if($editBudget)value="{{$editBudget->target}}"@endif />
                         </div>
                     </div>
                     <div class="control-group">

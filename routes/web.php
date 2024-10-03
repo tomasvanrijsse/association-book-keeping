@@ -39,7 +39,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::post('/mandates', [MandatesController::class, 'store']);
 
     Route::get('/budgets/{budget?}', [BudgetController::class,'index'])->name('budgets');
-    Route::post('/budgets', [BudgetController::class,'create']);
+    Route::post('/new-budget', [BudgetController::class,'create']);
     Route::patch('/budgets/{budget}', [BudgetController::class,'update']);
     Route::delete('/budgets/{budget}', [BudgetController::class,'delete']);
 

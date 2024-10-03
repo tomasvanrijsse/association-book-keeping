@@ -58,7 +58,10 @@ class CreditController extends Controller {
         $transaction->contribution_period_id = $period->id;
         $transaction->save();
 
-        echo Number::currency($period->balance, 'EUR');
+        return response()->json([
+            'balance' => Number::currency($period->balance, 'EUR'),
+            'credit' => Number::currency($period->credit, 'EUR'),
+        ]);
     }
 
 }
