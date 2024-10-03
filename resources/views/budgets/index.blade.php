@@ -67,7 +67,7 @@
                 @else
                     <p style="font-weight: bold">Nieuw budget aanmaken</p>
                 @endif
-                <form action="/budgets/{{ $editBudget?->id }}" id="addBudget" method="POST">
+                <form action="{{ $editBudget ? '/budgets/'.$editBudget->id : '/new-budget' }}" id="addBudget" method="POST">
                     @csrf
                     @if($editBudget) @method('PATCH') @endif
                     <div class="control-group">
