@@ -50,6 +50,14 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td style="border-top: 1px solid #333;">Totaal</td>
+                                <td style="border-top: 1px solid #333;">{{ Number::currency($budgets->sum('balance'), 'EUR') }} </td>
+                                <td style="border-top: 1px solid #333;"></td>
+                                <td style="border-top: 1px solid #333;"></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
